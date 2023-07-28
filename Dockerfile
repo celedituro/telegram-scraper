@@ -1,5 +1,5 @@
 # Usa la imagen oficial de Python como punto de partida
-FROM python:3.9
+FROM python:3.11
 
 # Directorio de trabajo dentro del contenedor
 WORKDIR /app

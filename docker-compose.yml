@@ -1,4 +1,4 @@
-version: '3.9'
+version: "3.9"
 
 services:
   app:
@@ -7,16 +7,16 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      - postgres
 
-  db:
-    image: postgres
+  postgres:
+    image: postgres:alpine
     environment:
-      POSTGRES_DB: postgres
+      POSTGRES_DB: scraper
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
     ports:
-      - "5432:5432"
+      - "5435:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
