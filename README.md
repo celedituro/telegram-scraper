@@ -1,11 +1,11 @@
-# Scraper
+# Telegram Scraper
 
 ## Tecnologías
 
-- FastApi
-- Poetry
+- Python
+- PostgreSql
 - Docker
-- Postgresql
+
 
 ## Ejecución del programa
 
