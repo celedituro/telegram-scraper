@@ -1,18 +1,24 @@
 from .database import Database
-from .telegram_bot import TelegramBot
+from .bot import TelegramBot
 import threading
 from .api import app
 import uvicorn
 
-# Init database 
-db = Database()
-db.create_message_table()
-db.close()
+def run_db():
+    try:
+        db = Database()
+        db.create_message_table()
+        # Perform other operations with the database if needed
+    except Exception as e:
+        print("Error during application execution:", e)
+    finally:
+        db.close()
 
 def run_api():
     uvicorn.run(app, host="0.0.0.0", port=8000)
 
 bot = TelegramBot()
+
 # Spawn bot thread
 bot_thread = threading.Thread(target=bot.start_bot)
 print("Spawn bot thread")
