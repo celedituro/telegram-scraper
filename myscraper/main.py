@@ -1,4 +1,4 @@
-from .api import app
+from .api.routes import app
 import uvicorn
 
 if __name__ == '__main__':
