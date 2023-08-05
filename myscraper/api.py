@@ -9,7 +9,7 @@ def welcome():
     return {'Welcome to the Telegram Channels Scraper'}
 
 @app.post("/messages/")
-def add_messages(messages):
+def add_messages(messages: list):
     try:
         response_messages = []
         for message in messages:
