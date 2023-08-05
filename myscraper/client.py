@@ -12,6 +12,7 @@ api_id = os.environ.get('API_ID')
 api_hash = os.environ.get('API_HASH')
 phone_number = os.environ.get('PHONE_NUMBER')
 group_username = os.environ.get('GROUP_USERNAME')
+api_url = os.environ.get('API_URL')
 
 def get_client(api_id, api_hash):
     try:
@@ -58,14 +59,14 @@ async def run_client():
     async with httpx.AsyncClient() as client:
         messages = await get_messages(api_id, api_hash, phone_number, group_username)
         data = parse_messages(messages)
-        response = await client.post('http://localhost:8000/messages', json=data)
+        response = await client.post(f'{api_url}/messages', json=data)
         if response.status_code == 200:
             data = response.json()
             print("Response from server:", data)
         else:
             if response.status_code == 307:
                 new_location = response.headers.get('Location')
-                print('Redirecting to: {new_location}')
+                print(f'Redirecting to: {new_location}')
                 response = await client.post(new_location, json=data)
                 print("Response from server:", data)
             else:
