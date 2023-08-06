@@ -36,6 +36,18 @@ class Database:
             print("Messages table created")
         except psycopg2.Error as e:
             print("Error when creating messages table:", e)
+    
+    def get_all_messages(self):
+        try:
+            cursor = self.connection.cursor()
+            sql_sentence = "SELECT * FROM messages"
+            cursor.execute(sql_sentence)
+            messages = cursor.fetchall()
+            cursor.close()
+            return messages
+            print("Get all messages")
+        except psycopg2.Error as e:
+            print("Error when getting messages table:", e)
 
     def close(self):
         self.connection.close()
