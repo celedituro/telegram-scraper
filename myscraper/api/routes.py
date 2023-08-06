@@ -1,8 +1,11 @@
 import os
 import asyncio
 from fastapi import FastAPI, HTTPException
+from ..database.database import Database
 
 app = FastAPI()
+db = Database()
+db.create_message_table()
 
 @app.get('/')
 def welcome():

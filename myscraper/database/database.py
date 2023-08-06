@@ -29,7 +29,7 @@ class Database:
     def create_message_table(self):
         try:
             cursor = self.connection.cursor()
-            sql_sentence = "CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY, sender TEXT NOT NULL)"
+            sql_sentence = "CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY, content TEXT NOT NULL)"
             cursor.execute(sql_sentence)
             self.connection.commit()
             cursor.close()
