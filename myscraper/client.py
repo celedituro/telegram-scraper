@@ -16,18 +16,21 @@ api_url = os.environ.get('API_URL')
 
 def get_client(api_id, api_hash):
     try:
+        print('Getting telegram client')
         return TelegramClient('my_telegram_session', api_id, api_hash)
     except Exception as e:
         print("Error in getting client: ", str(e))
 
 async def get_group_entity(client, group_username):
     try:
+        print('Getting group entity')
         return await client.get_entity(group_username)    
     except Exception as e:
         print("Error in getting group entity: ", str(e))
 
 async def get_group_messages(client, entity):
     try:
+        print('Getting group messages')
         return await client.get_messages(entity, limit=100, filter=InputMessagesFilterEmpty())
     except Exception as e:
        print("Error in getting group messages: ", str(e))

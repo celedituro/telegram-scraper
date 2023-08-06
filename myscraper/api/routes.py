@@ -14,9 +14,6 @@ def welcome():
 @app.post("/messages/")
 def add_messages(messages: list):
     try:
-        response_messages = []
-        for message in messages:
-            response_messages.append({"message": message})
-        return response_messages
+        return messages
     except Exception as e:
         raise HTTPException(status_code=500, detail='Error in getting messages: ' + str(e))
