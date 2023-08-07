@@ -2,7 +2,7 @@
 FROM python:3
 
 # Directorio de trabajo dentro del contenedor
-WORKDIR /usr/src/app
+WORKDIR /app
 
 ENV PYTHONPATH=${PYTHONPATH}:${PWD} 
 
@@ -16,7 +16,7 @@ RUN pip install poetry
 RUN poetry install --no-root --no-interaction
 
 # Copia todas las fuentes de tu aplicación al contenedor
-COPY . .
+COPY . /app
 
 # Expone el puerto en el que se ejecuta tu aplicación FastAPI (asegúrate de que coincida con el puerto que estás utilizando en tu código)
 EXPOSE 8000

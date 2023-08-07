@@ -22,9 +22,9 @@ class Database:
                 host=db_host,
                 port=db_port
             )
-            print("Database connected")
+            print("[DATABASE]: db connected")
         except psycopg2.Error as e:
-            print("Error when connecting to database:", e)
+            print("[DATABASE]: Error when connecting to database:", e)
 
     def create_message_table(self):
         try:
@@ -33,9 +33,9 @@ class Database:
             cursor.execute(sql_sentence)
             self.connection.commit()
             cursor.close()
-            print("Messages table created")
+            print("[DATABASE]: messages table created")
         except psycopg2.Error as e:
-            print("Error when creating messages table:", e)
+            print("[DATABASE]: Error when creating messages table:", e)
     
     def get_all_messages(self):
         try:
@@ -45,12 +45,23 @@ class Database:
             messages = cursor.fetchall()
             cursor.close()
             return messages
-            print("Get all messages")
+            print("[DATABASE]: got all messages")
         except psycopg2.Error as e:
-            print("Error when getting messages table:", e)
+            print("[DATABASE]: Error when getting all messages:", e)
+            
+    def insert_message(self, id, content):
+        try:
+            cursor = self.connection.cursor()
+            sql_sentence = "INSERT INTO messages (id, content) VALUES (%s, %s)"
+            cursor.execute(sql_sentence, (id, content))
+            self.connection.commit()
+            cursor.close()
+            print(f"[DATABASE]: message {id} was added")
+        except psycopg2.Error as e:
+            print(f"[DATABASE]: Error when inserting message {id}:", e)
 
     def close(self):
         self.connection.close()
-        print("Database connection closed")
+        print("[DATABASE]: db disconnected")
 
 
