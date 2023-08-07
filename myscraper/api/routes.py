@@ -28,7 +28,7 @@ def welcome():
 @app.post("/message/", status_code=201)
 def add_messages(message: Message):
     try:
-        service.add_message(message.id, message.content)
+        service.add_message(message.id, message.channel_id, message.content)
         return message
     except Exception as e:
         raise HTTPException(status_code=500, detail='Error when adding new message: ' + str(e))

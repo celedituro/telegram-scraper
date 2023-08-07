@@ -29,7 +29,8 @@ class Database:
     def create_message_table(self):
         try:
             cursor = self.connection.cursor()
-            sql_sentence = "CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY, content TEXT NOT NULL)"
+            #sql_sentence = "CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY, channel_id INTEGER NOT NULL, content TEXT NOT NULL, date DATE NOT NULL)"
+            sql_sentence = "CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY, channel_id INTEGER, content TEXT NOT NULL)"
             cursor.execute(sql_sentence)
             self.connection.commit()
             cursor.close()
@@ -49,11 +50,11 @@ class Database:
         except psycopg2.Error as e:
             print("[DATABASE]: Error when getting all messages:", e)
             
-    def insert_message(self, id, content):
+    def insert_message(self, id, channel_id, content):
         try:
             cursor = self.connection.cursor()
-            sql_sentence = "INSERT INTO messages (id, content) VALUES (%s, %s)"
-            cursor.execute(sql_sentence, (id, content))
+            sql_sentence = "INSERT INTO messages (id, channel_id, content) VALUES (%s, %s, %s)"
+            cursor.execute(sql_sentence, (id, channel_id, content))
             self.connection.commit()
             cursor.close()
             print(f"[DATABASE]: message {id} was added")
