@@ -12,7 +12,7 @@ class Database:
             )
             print("[DATABASE]: db connected")
         except psycopg2.Error as e:
-            print("[DATABASE]: Error when connecting to database:", e)
+            print("[DATABASE]: Error when connecting to db:", e)
 
     def create_message_table(self):
         try:
@@ -51,7 +51,7 @@ class Database:
     def get_link_messages(self):
         try:
             cursor = self.connection.cursor()
-            sql_sentence = "SELECT * FROM messages WHERE type = link"
+            sql_sentence = "SELECT * FROM messages WHERE type = 'link'"
             cursor.execute(sql_sentence)
             messages = cursor.fetchall()
             cursor.close()

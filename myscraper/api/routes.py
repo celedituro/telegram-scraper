@@ -46,14 +46,14 @@ def add_messages(message: Message):
     except Exception as e:
         raise HTTPException(status_code=500, detail='Error when adding new message: ' + str(e))
 
-@app.get("/messages", status_code=200, response_model=List[Message])
+@app.get("/messages", status_code=200)
 def get_all_messages():
     try:
         return service.get_all_messages()
     except Exception as e:
         raise HTTPException(status_code=500, detail='Error in getting messages: ' + str(e))
 
-@app.get("/messages/link", status_code=200, response_model=List[Message])
+@app.get("/messages/link", status_code=200)
 def get_link_messages():
     try:
         return service.get_link_messages()
