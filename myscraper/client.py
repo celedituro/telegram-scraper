@@ -65,16 +65,14 @@ async def run_client(parser: MessageParser):
             print(f'[CLIENT]: send {d} to server')
             response = await client.post(f'{api_url}/message/', json=d)
             if response.status_code == 201:
-                data = response.json()
-                print("[CLIENT]: receive from server: ", data)
+                print("[CLIENT]: receive from server:", response.status_code)
             else:
                 if response.status_code == 307:
                     new_location = response.headers.get('Location')
-                    print(f'[CLIENT]: redirecting to: {new_location}')
+                    print(f'[CLIENT]: redirecting request to: {new_location}')
                     response = await client.post(new_location, json=data)
-                    print("[CLIENT]: receive from server: ", data)
                 else:
-                    print("[CLIENT]: receive from server: ", response.status_code)
+                    print("[CLIENT]: receive from server:", response.status_code)
 
 if __name__ == '__main__':
     parser = MessageParser()

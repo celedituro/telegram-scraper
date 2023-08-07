@@ -1,14 +1,13 @@
 from telethon.tl.types import InputMessagesFilterEmpty, MessageMediaPhoto, MessageMediaWebPage
 import base64
-import datetime
+from datetime import datetime
 
 class MessageParser:
-    
     def get_photo_content(self, photo_bytes):
         return base64.b64encode(photo_bytes).decode('utf-8')
     
-    def get_message_date(self, date_str, format):
-        return datetime.datetime.strptime(date_str, format)
+    def get_message_date(self, date, format):
+        return date.strftime(format)
 
     def get_message_content(self, message):
         content = message.message
@@ -27,6 +26,6 @@ class MessageParser:
                 "id": message.id,
                 "channel_id": message.peer_id.channel_id,
                 "content": self.get_message_content(message),
-                #"date": self.get_message_date(message.date, '%Y-%m-%d')
+                "date": self.get_message_date(message.date, '%Y-%m-%d')
             }
             return msg

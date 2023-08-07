@@ -3,7 +3,7 @@ import asyncio
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from ..database.database import Database
-from ..service.message_service import MessageService
+from ..service.service import MessageService
 from ..models.message import Message
 
 app = FastAPI()
@@ -28,7 +28,7 @@ def welcome():
 @app.post("/message/", status_code=201)
 def add_messages(message: Message):
     try:
-        service.add_message(message.id, message.channel_id, message.content)
+        service.add_message(message.id, message.channel_id, message.content, message.date)
         return message
     except Exception as e:
         raise HTTPException(status_code=500, detail='Error when adding new message: ' + str(e))
