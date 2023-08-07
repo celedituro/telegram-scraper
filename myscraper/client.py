@@ -6,6 +6,7 @@ from telethon import TelegramClient, sync
 from telethon.tl.types import InputMessagesFilterEmpty
 import json
 import warnings
+from models.parser import MessageParser
 
 load_dotenv()
 api_id = os.environ.get('API_ID')
@@ -47,21 +48,19 @@ async def get_messages(api_id, api_hash, phone_number, group_username):
     except Exception as e:
         print("[CLIENT]: Error in getting messages: ", str(e))
 
-def parse_messages(messages):
+def get_parsed_messages(parser, messages):
     data = []
     for message in messages:
-        msg = {
-            "id": message.id,
-            "content": message.message,
-        }
-        data.append(msg)
+        parsed_message = parser.parse_message(message)
+        if parsed_message:
+            data.append(parsed_message)
     
     return data
 
-async def run_client():
+async def run_client(parser: MessageParser):
     async with httpx.AsyncClient() as client:
         messages = await get_messages(api_id, api_hash, phone_number, group_username)
-        data = parse_messages(messages)
+        data = get_parsed_messages(parser, messages)  
         for d in data:
             print(f'[CLIENT]: send {d} to server')
             response = await client.post(f'{api_url}/message/', json=d)
@@ -78,4 +77,5 @@ async def run_client():
                     print("[CLIENT]: receive from server: ", response.status_code)
 
 if __name__ == '__main__':
-    asyncio.run(run_client())
+    parser = MessageParser()
+    asyncio.run(run_client(parser))
