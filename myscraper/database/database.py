@@ -17,7 +17,7 @@ class Database:
     def create_message_table(self):
         try:
             cursor = self.connection.cursor()
-            sql_sentence = "CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY, channel_id INTEGER, content TEXT NOT NULL, date DATE)"
+            sql_sentence = "CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY, channel_id INTEGER, content TEXT NOT NULL, date DATE, type TEXT NOT NULL)"
             cursor.execute(sql_sentence)
             self.connection.commit()
             cursor.close()
@@ -37,16 +37,28 @@ class Database:
         except psycopg2.Error as e:
             print("[DATABASE]: Error when getting all messages:", e)
             
-    def insert_message(self, id, channel_id, content, date):
+    def insert_message(self, id, channel_id, content, date, message_type):
         try:
             cursor = self.connection.cursor()
-            sql_sentence = "INSERT INTO messages (id, channel_id, content, date) VALUES (%s, %s, %s, %s)"
-            cursor.execute(sql_sentence, (id, channel_id, content, date))
+            sql_sentence = "INSERT INTO messages (id, channel_id, content, date, type) VALUES (%s, %s, %s, %s, %s)"
+            cursor.execute(sql_sentence, (id, channel_id, content, date, message_type))
             self.connection.commit()
             cursor.close()
             print(f"[DATABASE]: message {id} was added")
         except psycopg2.Error as e:
             print(f"[DATABASE]: Error when inserting message {id}:", e)
+            
+    def get_link_messages(self):
+        try:
+            cursor = self.connection.cursor()
+            sql_sentence = "SELECT * FROM messages WHERE type = link"
+            cursor.execute(sql_sentence)
+            messages = cursor.fetchall()
+            cursor.close()
+            return messages
+            print("[DATABASE]: got link messages")
+        except psycopg2.Error as e:
+            print("[DATABASE]: Error when getting link messages:", e)
 
     def close(self):
         self.connection.close()

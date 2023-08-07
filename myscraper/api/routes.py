@@ -1,12 +1,13 @@
-import os
 import asyncio
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+import os
+from dotenv import load_dotenv
+from typing import List
+
 from ..database.database import Database
 from ..service.service import MessageService
 from ..models.message import Message
-import os
-from dotenv import load_dotenv
 
 # Load environment variables from .env file
 load_dotenv()
@@ -37,17 +38,24 @@ service = MessageService(db)
 def welcome():
     return {'Welcome to the Telegram Channels Scraper'}
 
-@app.post("/message/", status_code=201)
+@app.post("/message/", status_code=201, response_model=Message)
 def add_messages(message: Message):
     try:
-        service.add_message(message.id, message.channel_id, message.content, message.date)
+        service.add_message(message.id, message.channel_id, message.content, message.date, message.message_type)
         return message
     except Exception as e:
         raise HTTPException(status_code=500, detail='Error when adding new message: ' + str(e))
 
-@app.get("/messages", status_code=200)
+@app.get("/messages", status_code=200, response_model=List[Message])
 def get_all_messages():
     try:
         return service.get_all_messages()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail='Error in getting messages: ' + str(e))
+
+@app.get("/messages/link", status_code=200, response_model=List[Message])
+def get_link_messages():
+    try:
+        return service.get_link_messages()
     except Exception as e:
         raise HTTPException(status_code=500, detail='Error in getting messages: ' + str(e))
