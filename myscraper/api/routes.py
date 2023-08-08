@@ -39,7 +39,7 @@ presenter = Presenter()
 service = MessageService(db, parser, presenter)
 
 @app.get('/', status_code=200)
-def welcome():
+def read_root():
     return {'Welcome to the Telegram Channels Scraper'}
 
 @app.post("/message/", status_code=201)
