@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 from dotenv import load_dotenv
 from typing import List
+from psycopg2 import IntegrityError
 
 from ..database.database import Database
 from ..service.service import MessageService
@@ -38,21 +39,33 @@ parser = MessageParser()
 presenter = Presenter()
 service = MessageService(db, parser, presenter)
 
+post_responses = {
+    201: {"description": "Created", "model": Message},
+    400: {"description": "Bad Request", "content": {"application/json": {"example": {"detail": "Message already exists"}}}},
+    500: {"description": "Internal Server Error", "content": {"application/json": {"example": {"detail": "Internal Server Error"}}}},
+}
+
+get_responses = {
+    500: {"description": "Internal Server Error", "content": {"application/json": {"example": {"detail": "Internal Server Error"}}}},
+}
+
 @app.get('/', status_code=200)
 def read_root():
     return {'Welcome to the Telegram Channels Scraper'}
 
-@app.post("/message/", status_code=201, response_model=Message)
+@app.post("/message/", status_code=201, response_model=Message, responses=post_responses)
 async def add_message(message: Message):
     """
     Create a new message.
     """
     try:
         return await service.add_message(message)
+    except IntegrityError:
+        raise HTTPException(status_code=400, detail="Message already exists", headers={"X-Error": "ItemDuplicate"})
     except Exception as e:
         raise HTTPException(status_code=500, detail='Error when adding new message: ' + str(e))
 
-@app.get("/messages", status_code=200, response_model=List[Message])
+@app.get("/messages", status_code=200, response_model=List[Message], responses=get_responses)
 def get_all_messages():
     """
     Get a list of messages.
@@ -62,7 +75,7 @@ def get_all_messages():
     except Exception as e:
         raise HTTPException(status_code=500, detail='Error in getting messages: ' + str(e))
 
-@app.get("/messages/link", status_code=200, response_model=List[LinkMessage])
+@app.get("/messages/link", status_code=200, response_model=List[LinkMessage], responses=get_responses)
 def get_link_messages():
     """
     Get a list of link messages.

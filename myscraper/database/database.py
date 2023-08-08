@@ -1,4 +1,5 @@
 import psycopg2
+from psycopg2 import IntegrityError
 
 class Database:
     def __init__(self, db_name, db_user, db_password, db_host, db_port):
@@ -45,6 +46,8 @@ class Database:
             self.connection.commit()
             cursor.close()
             print(f"[DATABASE]: message {id} was added")
+        except IntegrityError as e:
+            raise IntegrityError(e)
         except psycopg2.Error as e:
             print(f"[DATABASE]: Error when inserting message {id}:", e)
             
