@@ -45,7 +45,7 @@ class Scraper:
         if response.status_code == 307:
             new_location = response.headers.get('Location')
             print(f'[CLIENT]: redirecting request to: {new_location}')
-            await c.post(new_location, json=data)
+            response = await c.post(new_location, json=data)
             print("[CLIENT]: receive from server:", response.status_code)
         else:
             print("[CLIENT]: receive from server:", response.status_code)
@@ -58,5 +58,5 @@ class Scraper:
                 if parsed_message:
                     print(f'[CLIENT]: send {parsed_message} to server')
                     response = await c.post(f'{api_url}/message/', json=parsed_message)
-                    self.handle_response(c, response)
+                    await self.handle_response(c, response)
     

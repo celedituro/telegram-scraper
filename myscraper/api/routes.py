@@ -7,6 +7,8 @@ from typing import List
 
 from ..database.database import Database
 from ..service.service import MessageService
+from ..models.presenter import Presenter
+from ..models.parser import MessageParser
 from ..models.message import Message
 
 # Load environment variables from .env file
@@ -32,17 +34,18 @@ app.add_middleware(
 
 db = Database(db_name, db_user, db_password, db_host, db_port)
 db.create_message_table()
-service = MessageService(db)
+parser = MessageParser()
+presenter = Presenter()
+service = MessageService(db, parser, presenter)
 
 @app.get('/', status_code=200)
 def welcome():
     return {'Welcome to the Telegram Channels Scraper'}
 
-@app.post("/message/", status_code=201, response_model=Message)
-def add_messages(message: Message):
+@app.post("/message/", status_code=201)
+async def add_messages(message: Message):
     try:
-        service.add_message(message.id, message.channel_id, message.content, message.date, message.message_type)
-        return message
+        return await service.add_message(message)
     except Exception as e:
         raise HTTPException(status_code=500, detail='Error when adding new message: ' + str(e))
 
@@ -58,4 +61,4 @@ def get_link_messages():
     try:
         return service.get_link_messages()
     except Exception as e:
-        raise HTTPException(status_code=500, detail='Error in getting messages: ' + str(e))
+        raise HTTPException(status_code=500, detail='Error in getting link messages: ' + str(e))
