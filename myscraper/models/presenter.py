@@ -5,7 +5,7 @@ class Presenter:
             "channel_id": message.channel_id,
             "content": message.content,
             "date": message.date,
-            "type": message.message_type
+            "message_type": message.message_type
         }
 
     def present_all_messages(self, messages):
@@ -16,7 +16,7 @@ class Presenter:
                 "channel_id": message[1],
                 "content": message[2],
                 "date": message[3],
-                "type": message[4]
+                "message_type": message[4]
             }
             new_messages.append(new_message)
         return new_messages

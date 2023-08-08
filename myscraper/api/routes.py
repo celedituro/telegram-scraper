@@ -9,7 +9,7 @@ from ..database.database import Database
 from ..service.service import MessageService
 from ..models.presenter import Presenter
 from ..models.parser import MessageParser
-from ..models.message import Message
+from ..models.message import Message, LinkMessage
 
 # Load environment variables from .env file
 load_dotenv()
@@ -42,22 +42,31 @@ service = MessageService(db, parser, presenter)
 def read_root():
     return {'Welcome to the Telegram Channels Scraper'}
 
-@app.post("/message/", status_code=201)
-async def add_messages(message: Message):
+@app.post("/message/", status_code=201, response_model=Message)
+async def add_message(message: Message):
+    """
+    Create a new message.
+    """
     try:
         return await service.add_message(message)
     except Exception as e:
         raise HTTPException(status_code=500, detail='Error when adding new message: ' + str(e))
 
-@app.get("/messages", status_code=200)
+@app.get("/messages", status_code=200, response_model=List[Message])
 def get_all_messages():
+    """
+    Get a list of messages.
+    """
     try:
         return service.get_all_messages()
     except Exception as e:
         raise HTTPException(status_code=500, detail='Error in getting messages: ' + str(e))
 
-@app.get("/messages/link", status_code=200)
+@app.get("/messages/link", status_code=200, response_model=List[LinkMessage])
 def get_link_messages():
+    """
+    Get a list of link messages.
+    """
     try:
         return service.get_link_messages()
     except Exception as e:

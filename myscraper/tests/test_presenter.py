@@ -11,7 +11,7 @@ def test_01_present_message():
     assert presented_message["channel_id"] == 123
     assert presented_message["content"] == "Hello, world!"
     assert presented_message["date"] == "2023-08-08"
-    assert presented_message["type"] == "text"
+    assert presented_message["message_type"] == "text"
 
 def test_02_present_all_messages():
     presenter = Presenter()
@@ -26,12 +26,12 @@ def test_02_present_all_messages():
     assert presented_messages[0]["channel_id"] == 123
     assert presented_messages[0]["content"] == "Message 1"
     assert presented_messages[0]["date"] == "2023-08-08"
-    assert presented_messages[0]["type"] == "text"
+    assert presented_messages[0]["message_type"] == "text"
     assert presented_messages[1]["id"] == 2
     assert presented_messages[1]["channel_id"] == 456
     assert presented_messages[1]["content"] == "Message 2"
     assert presented_messages[1]["date"] == "2023-08-09"
-    assert presented_messages[1]["type"] == "photo"
+    assert presented_messages[1]["message_type"] == "photo"
     
 def test_03_present_link_messages():
     presenter = Presenter()

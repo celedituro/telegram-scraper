@@ -12,3 +12,9 @@ class Message(BaseModel):
     content: str
     date: str
     message_type: MessageType
+
+class LinkMessage(BaseModel):
+    id: int
+    channel_id: int
+    content: str
+    date: str
