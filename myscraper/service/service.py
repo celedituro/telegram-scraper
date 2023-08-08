@@ -8,7 +8,6 @@ class MessageService:
 
     async def add_message(self, message):
         parsed_date = self.parser.parse_date(message.date)
-        print(message)
         await self.database.insert_message(message.id, message.channel_id, message.content, parsed_date, message.message_type.name)
         return self.presenter.present_message(message)
 

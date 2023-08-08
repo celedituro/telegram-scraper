@@ -21,5 +21,5 @@ COPY . /app
 # Expone el puerto en el que se ejecuta tu aplicación FastAPI (asegúrate de que coincida con el puerto que estás utilizando en tu código)
 EXPOSE 8000
 
-# Comando para ejecutar tu aplicación cuando se inicie el contenedor
-CMD ["poetry", "run", "uvicorn", "myscraper.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Ejecuta los comandos al inicializar el contenedor
+CMD ["sh", "-c", "poetry run pytest myscraper/tests && poetry run uvicorn myscraper.main:app --host 0.0.0.0 --port 8000"]
