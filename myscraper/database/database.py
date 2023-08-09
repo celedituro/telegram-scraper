@@ -15,7 +15,7 @@ class Database:
         except psycopg2.Error as e:
             print("[DATABASE]: Error when connecting to db:", e)
 
-    def create_message_table(self):
+    def create_messages_table(self):
         try:
             cursor = self.connection.cursor()
             sql_sentence = "CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY, channel_id INTEGER, content TEXT NOT NULL, date DATE, type TEXT NOT NULL)"
@@ -25,6 +25,17 @@ class Database:
             print("[DATABASE]: messages table created")
         except psycopg2.Error as e:
             print("[DATABASE]: Error when creating messages table:", e)
+
+    def create_users_table(self):
+        try:
+            cursor = self.connection.cursor()
+            sql_sentence = "CREATE TABLE IF NOT EXISTS users (username TEXT PRIMARY KEY, password TEXT NOT NULL)"
+            cursor.execute(sql_sentence)
+            self.connection.commit()
+            cursor.close()
+            print("[DATABASE]: users table created")
+        except psycopg2.Error as e:
+            print("[DATABASE]: Error when creating users table:", e)
     
     def get_all_messages(self):
         try:

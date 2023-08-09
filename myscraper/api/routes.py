@@ -34,7 +34,9 @@ app.add_middleware(
 )
 
 db = Database(DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT)
-db.create_message_table()
+db.create_messages_table()
+db.create_users_table()
+
 parser = MessageParser()
 presenter = Presenter()
 service = MessageService(db, parser, presenter)
