@@ -19,7 +19,7 @@ class MessageRepository:
         except psycopg2.Error as e:
             print("[MESSAGE REPOSITORY]: Error when getting all messages:", e)
             
-    async def insert_message(self, id, channel_id, content, date, message_type):
+    def insert_message(self, id, channel_id, content, date, message_type):
         try:
             cursor = self.db.connection.cursor()
             sql_sentence = "INSERT INTO messages (id, channel_id, content, date, type) VALUES (%s, %s, %s, %s, %s) RETURNING *"

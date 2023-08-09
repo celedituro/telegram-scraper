@@ -8,9 +8,12 @@ from psycopg2 import IntegrityError
 
 from ..database.database import Database
 from ..services.message_service import MessageService
+from ..services.user_service import UserService
 from ..models.presenter import Presenter
 from ..models.message import Message, LinkMessage
+from ..models.user import User
 from ..database.repositories.message_repository import MessageRepository
+from ..database.repositories.user_respository import UserRepository
 
 # Load environment variables from .env file
 load_dotenv()
@@ -35,9 +38,13 @@ app.add_middleware(
 
 db = Database(DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT)
 db.create_tables()
+
 message_repository = MessageRepository(db)
+user_repository = UserRepository(db)
+
 presenter = Presenter()
 message_service = MessageService(message_repository, presenter)
+user_service = UserService(user_repository)
 
 post_responses = {
     201: {"description": "Created", "model": Message},
@@ -53,13 +60,13 @@ get_responses = {
 def read_root():
     return {'Welcome to the Telegram Channels Scraper'}
 
-@app.post("/message/", status_code=201, response_model=Message, responses=post_responses)
-async def add_message(message: Message):
+@app.post("/messages/", status_code=201, response_model=Message, responses=post_responses)
+def add_message(message: Message):
     """
     Create a new message.
     """
     try:
-        return await message_service.add_message(message)
+        return message_service.add_message(message)
     except IntegrityError:
         raise HTTPException(status_code=400, detail="Message already exists", headers={"X-Error": "ItemDuplicate"})
     except Exception as e:
@@ -84,3 +91,15 @@ def get_link_messages():
         return message_service.get_link_messages()
     except Exception as e:
         raise HTTPException(status_code=500, detail='Error in getting link messages: ' + str(e))
+
+@app.post("/users/", status_code=201)
+def add_user(user: User):
+    """
+    Create a new user.
+    """
+    try:
+        return user_service.add_user(user)
+    except IntegrityError:
+        raise HTTPException(status_code=400, detail="User already exists", headers={"X-Error": "ItemDuplicate"})
+    except Exception as e:
+        raise HTTPException(status_code=500, detail='Error when adding new user: ' + str(e))
