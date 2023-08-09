@@ -9,10 +9,11 @@ from psycopg2 import IntegrityError
 from ..database.database import Database
 from ..services.message_service import MessageService
 from ..services.user_service import UserService
-from ..models.presenter import Presenter
+from ..models.message_presenter import MessagePresenter
+from ..models.user_presenter import UserPresenter
 from ..models.encrypter import Encrypter
 from ..models.message import Message, LinkMessage
-from ..models.user import User
+from ..models.user import User, UserResponse
 from ..database.repositories.message_repository import MessageRepository
 from ..database.repositories.user_respository import UserRepository
 
@@ -43,13 +44,20 @@ db.create_tables()
 message_repository = MessageRepository(db)
 user_repository = UserRepository(db)
 
-presenter = Presenter()
-message_service = MessageService(message_repository, presenter)
+message_presenter = MessagePresenter()
+message_service = MessageService(message_repository, message_presenter)
 encrypter = Encrypter()
-user_service = UserService(user_repository, encrypter)
+user_presenter = UserPresenter()
+user_service = UserService(user_repository, encrypter, user_presenter)
 
-post_responses = {
+message_post_responses = {
     201: {"description": "Created", "model": Message},
+    400: {"description": "Bad Request", "content": {"application/json": {"example": {"detail": "Message already exists"}}}},
+    500: {"description": "Internal Server Error", "content": {"application/json": {"example": {"detail": "Internal Server Error"}}}},
+}
+
+user_post_responses = {
+    201: {"description": "Created", "model": UserResponse},
     400: {"description": "Bad Request", "content": {"application/json": {"example": {"detail": "Message already exists"}}}},
     500: {"description": "Internal Server Error", "content": {"application/json": {"example": {"detail": "Internal Server Error"}}}},
 }
@@ -62,7 +70,7 @@ get_responses = {
 def read_root():
     return {'Welcome to the Telegram Channels Scraper'}
 
-@app.post("/messages/", status_code=201, response_model=Message, responses=post_responses)
+@app.post("/messages/", status_code=201, response_model=Message, responses=message_post_responses)
 def add_message(message: Message):
     """
     Create a new message.
@@ -94,7 +102,7 @@ def get_link_messages():
     except Exception as e:
         raise HTTPException(status_code=500, detail='Error in getting link messages: ' + str(e))
 
-@app.post("/users/", status_code=201)
+@app.post("/users/", status_code=201, response_model=UserResponse, responses=user_post_responses)
 def add_user(user: User):
     """
     Create a new user.

@@ -1,6 +1,4 @@
-from ..models.parser import MessageParser
-
-class Presenter:
+class MessagePresenter:
     def present_message(self, message):
         new_message = {
             "id": message[0],
