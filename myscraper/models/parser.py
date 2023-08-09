@@ -28,10 +28,6 @@ class MessageParser:
             if isinstance(message.media, MessageMediaWebPage):
                 message_type = MessageType.link
         return message_type
-    
-    def parse_date(self, date_str):
-        date_datetime = datetime.strptime(date_str, '%Y-%m-%d')
-        return date_datetime.date()
             
     def parse_message(self, message):
         # Ignore MessageService messages

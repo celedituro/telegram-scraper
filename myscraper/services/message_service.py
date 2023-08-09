@@ -1,9 +1,8 @@
 from datetime import datetime
     
 class MessageService:
-    def __init__(self, database, parser, presenter):
+    def __init__(self, database, presenter):
         self.database = database
-        self.parser = parser
         self.presenter = presenter
 
     async def add_message(self, message):

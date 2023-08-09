@@ -37,44 +37,12 @@ class Database:
         except psycopg2.Error as e:
             print("[DATABASE]: Error when creating users table:", e)
     
-    def get_all_messages(self):
+    def create_tables(self):
         try:
-            cursor = self.connection.cursor()
-            sql_sentence = "SELECT * FROM messages"
-            cursor.execute(sql_sentence)
-            messages = cursor.fetchall()
-            cursor.close()
-            return messages
-            print("[DATABASE]: got all messages")
+            self.create_messages_table()
+            self.create_users_table()
         except psycopg2.Error as e:
-            print("[DATABASE]: Error when getting all messages:", e)
-            
-    async def insert_message(self, id, channel_id, content, date, message_type):
-        try:
-            cursor = self.connection.cursor()
-            sql_sentence = "INSERT INTO messages (id, channel_id, content, date, type) VALUES (%s, %s, %s, %s, %s) RETURNING *"
-            cursor.execute(sql_sentence, (id, channel_id, content, date, message_type))
-            inserted_message = cursor.fetchone()
-            self.connection.commit()
-            cursor.close()
-            return inserted_message
-            print(f"[DATABASE]: message {id} was added")
-        except IntegrityError as e:
-            raise IntegrityError(e)
-        except psycopg2.Error as e:
-            print(f"[DATABASE]: Error when inserting message {id}:", e)
-            
-    def get_link_messages(self):
-        try:
-            cursor = self.connection.cursor()
-            sql_sentence = "SELECT * FROM messages WHERE type = 'link'"
-            cursor.execute(sql_sentence)
-            messages = cursor.fetchall()
-            cursor.close()
-            return messages
-            print("[DATABASE]: got link messages")
-        except psycopg2.Error as e:
-            print("[DATABASE]: Error when getting link messages:", e)
+            print("[DATABASE]: Error when creating tables:", e)
 
     def close(self):
         self.connection.close()

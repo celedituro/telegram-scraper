@@ -9,8 +9,8 @@ from psycopg2 import IntegrityError
 from ..database.database import Database
 from ..services.message_service import MessageService
 from ..models.presenter import Presenter
-from ..models.parser import MessageParser
 from ..models.message import Message, LinkMessage
+from ..database.repositories.message_repository import MessageRepository
 
 # Load environment variables from .env file
 load_dotenv()
@@ -34,12 +34,10 @@ app.add_middleware(
 )
 
 db = Database(DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT)
-db.create_messages_table()
-db.create_users_table()
-
-parser = MessageParser()
+db.create_tables()
+message_repository = MessageRepository(db)
 presenter = Presenter()
-service = MessageService(db, parser, presenter)
+message_service = MessageService(message_repository, presenter)
 
 post_responses = {
     201: {"description": "Created", "model": Message},
@@ -61,7 +59,7 @@ async def add_message(message: Message):
     Create a new message.
     """
     try:
-        return await service.add_message(message)
+        return await message_service.add_message(message)
     except IntegrityError:
         raise HTTPException(status_code=400, detail="Message already exists", headers={"X-Error": "ItemDuplicate"})
     except Exception as e:
@@ -73,7 +71,7 @@ def get_all_messages():
     Get a list of messages.
     """
     try:
-        return service.get_all_messages()
+        return message_service.get_all_messages()
     except Exception as e:
         raise HTTPException(status_code=500, detail='Error in getting messages: ' + str(e))
 
@@ -83,6 +81,6 @@ def get_link_messages():
     Get a list of link messages.
     """
     try:
-        return service.get_link_messages()
+        return message_service.get_link_messages()
     except Exception as e:
         raise HTTPException(status_code=500, detail='Error in getting link messages: ' + str(e))
