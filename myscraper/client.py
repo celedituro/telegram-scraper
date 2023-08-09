@@ -5,13 +5,12 @@ from models.parser import MessageParser
 from models.scraper import Scraper
 
 load_dotenv()
-api_id = os.environ.get('API_ID')
-api_hash = os.environ.get('API_HASH')
-phone_number = os.environ.get('PHONE_NUMBER')
-group_username = os.environ.get('GROUP_USERNAME')
-api_url = os.environ.get('API_URL')
+API_ID = os.environ.get('API_ID')
+API_HASH = os.environ.get('API_HASH')
+PHONE_NUMBER = os.environ.get('PHONE_NUMBER')
+GROUP_USERNAME = os.environ.get('GROUP_USERNAME')
 
 if __name__ == '__main__':
-    scraper = Scraper(api_id, api_hash)
+    scraper = Scraper(API_ID, API_HASH)
     parser = MessageParser()
-    asyncio.run(scraper.run(parser, phone_number, group_username, api_url))
+    asyncio.run(scraper.run(parser, PHONE_NUMBER, GROUP_USERNAME))

@@ -1,12 +1,18 @@
-from ..models.presenter import Presenter
 from datetime import datetime
-from ..models.message import Message, MessageType
 
+from ..models.presenter import Presenter
+from ..models.message import Message, MessageType
+from ..models.parser import MessageParser
+import warnings
+
+warnings.filterwarnings("ignore", category=DeprecationWarning) 
+  
 def test_01_present_message():
-    presenter = Presenter()
-    message = Message(id=1, channel_id=123, content="Hello, world!", date="2023-08-08", message_type=MessageType.text)
-    
+    parser = MessageParser()
+    presenter = Presenter(parser)
+    message = (1, 123, "Hello, world!", "2023-08-08", "text")
     presented_message = presenter.present_message(message)
+    
     assert presented_message["id"] == 1
     assert presented_message["channel_id"] == 123
     assert presented_message["content"] == "Hello, world!"
@@ -14,7 +20,8 @@ def test_01_present_message():
     assert presented_message["message_type"] == "text"
 
 def test_02_present_all_messages():
-    presenter = Presenter()
+    parser = MessageParser()
+    presenter = Presenter(parser)
     messages = [
         (1, 123, "Message 1", "2023-08-08", "text"),
         (2, 456, "Message 2", "2023-08-09", "photo")
@@ -34,7 +41,8 @@ def test_02_present_all_messages():
     assert presented_messages[1]["message_type"] == "photo"
     
 def test_03_present_link_messages():
-    presenter = Presenter()
+    parser = MessageParser()
+    presenter = Presenter(parser)
     link_messages = [
         (1, 123, "https://example.com", "2023-08-08", "link"),
         (2, 456, "https://another-example.com", "2023-08-09", "link")
@@ -48,14 +56,16 @@ def test_03_present_link_messages():
     assert presented_link_messages[0]["date"] == "2023-08-08"
 
 def test_04_present_empty_all_messages():
-    presenter = Presenter()
+    parser = MessageParser()
+    presenter = Presenter(parser)
     messages = []
     presented_messages = presenter.present_all_messages(messages)
 
     assert len(presented_messages) == 0
 
 def test_05_present_empty_link_messages():
-    presenter = Presenter()
+    parser = MessageParser()
+    presenter = Presenter(parser)
     messages = []
     presented_messages = presenter.present_link_messages(messages)
 

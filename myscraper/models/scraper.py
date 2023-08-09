@@ -1,9 +1,16 @@
 import httpx
-from telethon import TelegramClient, sync
-from telethon.tl.types import InputMessagesFilterEmpty
 import json
 import warnings
+import os
+
+from telethon import TelegramClient, sync
+from telethon.tl.types import InputMessagesFilterEmpty
+from dotenv import load_dotenv
+
 from models.parser import MessageParser
+
+load_dotenv()
+API_URL = os.environ.get('API_URL')
 
 class Scraper:
     def __init__(self, api_id, api_hash):
@@ -50,13 +57,13 @@ class Scraper:
         else:
             print("[CLIENT]: receive from server:", response.status_code)
             
-    async def run(self, parser: MessageParser, phone_number, group_username, api_url):
+    async def run(self, parser: MessageParser, phone_number, group_username):
         async with httpx.AsyncClient() as c:
             messages = await self.get_messages(phone_number, group_username)
             for message in messages:
                 parsed_message = parser.parse_message(message)
                 if parsed_message:
                     print(f'[CLIENT]: send {parsed_message} to server')
-                    response = await c.post(f'{api_url}/message/', json=parsed_message)
+                    response = await c.post(f'{API_URL}/message/', json=parsed_message)
                     await self.handle_response(c, response)
     

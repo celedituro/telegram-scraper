@@ -7,9 +7,8 @@ class MessageService:
         self.presenter = presenter
 
     async def add_message(self, message):
-        parsed_date = self.parser.parse_date(message.date)
-        await self.database.insert_message(message.id, message.channel_id, message.content, parsed_date, message.message_type.name)
-        return self.presenter.present_message(message)
+        new_message = await self.database.insert_message(message.id, message.channel_id, message.content, message.date, message.message_type.name)
+        return self.presenter.present_message(new_message)
 
     def get_all_messages(self):
         messages = self.database.get_all_messages()

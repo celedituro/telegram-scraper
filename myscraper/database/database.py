@@ -41,10 +41,12 @@ class Database:
     async def insert_message(self, id, channel_id, content, date, message_type):
         try:
             cursor = self.connection.cursor()
-            sql_sentence = "INSERT INTO messages (id, channel_id, content, date, type) VALUES (%s, %s, %s, %s, %s)"
+            sql_sentence = "INSERT INTO messages (id, channel_id, content, date, type) VALUES (%s, %s, %s, %s, %s) RETURNING *"
             cursor.execute(sql_sentence, (id, channel_id, content, date, message_type))
+            inserted_message = cursor.fetchone()
             self.connection.commit()
             cursor.close()
+            return inserted_message
             print(f"[DATABASE]: message {id} was added")
         except IntegrityError as e:
             raise IntegrityError(e)

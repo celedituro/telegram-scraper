@@ -1,12 +1,18 @@
+from ..models.parser import MessageParser
+
 class Presenter:
+    def __init__(self, parser: MessageParser):
+        self.parser = parser
+        
     def present_message(self, message):
-        return {
-            "id": message.id,
-            "channel_id": message.channel_id,
-            "content": message.content,
-            "date": message.date,
-            "message_type": message.message_type
+        new_message = {
+            "id": message[0],
+            "channel_id": message[1],
+            "content": message[2],
+            "date": message[3],
+            "message_type": message[4]
         }
+        return new_message
 
     def present_all_messages(self, messages):
         new_messages = []

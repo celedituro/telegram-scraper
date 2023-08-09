@@ -7,7 +7,7 @@ from typing import List
 from psycopg2 import IntegrityError
 
 from ..database.database import Database
-from ..service.service import MessageService
+from ..services.message_service import MessageService
 from ..models.presenter import Presenter
 from ..models.parser import MessageParser
 from ..models.message import Message, LinkMessage
@@ -16,11 +16,11 @@ from ..models.message import Message, LinkMessage
 load_dotenv()
 
 # Access the environment variables
-db_name = os.environ.get('DB_NAME')
-db_user = os.environ.get('DB_USER')
-db_password = os.environ.get('DB_PASSWORD')
-db_host = os.environ.get('DB_HOST')
-db_port = os.environ.get('DB_PORT')
+DB_NAME = os.environ.get('DB_NAME')
+DB_USER = os.environ.get('DB_USER')
+DB_PASSWORD = os.environ.get('DB_PASSWORD')
+DB_HOST = os.environ.get('DB_HOST')
+DB_PORT = os.environ.get('DB_PORT')
 
 app = FastAPI()
 
@@ -33,10 +33,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-db = Database(db_name, db_user, db_password, db_host, db_port)
+db = Database(DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT)
 db.create_message_table()
 parser = MessageParser()
-presenter = Presenter()
+presenter = Presenter(parser)
 service = MessageService(db, parser, presenter)
 
 post_responses = {
