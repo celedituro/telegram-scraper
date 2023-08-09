@@ -10,6 +10,7 @@ from ..database.database import Database
 from ..services.message_service import MessageService
 from ..services.user_service import UserService
 from ..models.presenter import Presenter
+from ..models.encrypter import Encrypter
 from ..models.message import Message, LinkMessage
 from ..models.user import User
 from ..database.repositories.message_repository import MessageRepository
@@ -44,7 +45,8 @@ user_repository = UserRepository(db)
 
 presenter = Presenter()
 message_service = MessageService(message_repository, presenter)
-user_service = UserService(user_repository)
+encrypter = Encrypter()
+user_service = UserService(user_repository, encrypter)
 
 post_responses = {
     201: {"description": "Created", "model": Message},
