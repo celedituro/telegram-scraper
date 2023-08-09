@@ -64,6 +64,6 @@ class Scraper:
                 parsed_message = parser.parse_message(message)
                 if parsed_message:
                     print(f'[CLIENT]: send {parsed_message} to server')
-                    response = await c.post(f'{API_URL}/messages/', json=parsed_message)
+                    response = await c.post(f'{API_URL}/messages', json=parsed_message)
                     await self.handle_response(c, response)
     

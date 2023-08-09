@@ -10,3 +10,6 @@ class UserService:
         hashed_password = self.encrypter.encrypt_password(user.password)
         new_user = self.repository.insert_user(user.username, hashed_password)
         return self.presenter.present_user(new_user)
+    
+    def login_user(self, user):
+        return self.repository.get_user(user.username)

@@ -21,3 +21,16 @@ class UserRepository:
             raise IntegrityError(e)
         except psycopg2.Error as e:
             print(f"[USER REPOSITORY]: Error when inserting user {username}:", e)
+    
+    def get_user(self, username):
+        try:
+            cursor = self.db.connection.cursor()
+            sql_sentence = "SELECT * FROM users WHERE username = %s"
+            cursor.execute(sql_sentence, (username,))
+            user = cursor.fetchone()
+            cursor.close()
+            return user
+            print(f"[USER REPOSITORY]: user with username {username} got")
+        except psycopg2.Error as e:
+            print(f"[USER REPOSITORY]: Error when getting user {username}:", e)
+            

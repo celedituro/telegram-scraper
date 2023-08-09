@@ -9,15 +9,15 @@ JWT_ALGORITHM = os.getenv('JWT_ALGORITHM')
 JWT_ACCESS_TOKEN_EXPIRE_MINUTES = float(os.getenv('JWT_ACCESS_TOKEN_EXPIRE_MINUTES'))
 
 class AuthService:
-    def getJWT(username: str):
+    def getJWT(self, username: str):
         payload = {
             "username": username,
             "expires": time.time() + JWT_ACCESS_TOKEN_EXPIRE_MINUTES
         }
         token = jwt.encode(payload, JWT_SECRET_KEY, algorithm=JWT_ALGORITHM)
-        return {"token": access_token, "type": "bearer"}
+        return token
 
-    def decodeJWT(token: str):
+    def decodeJWT(self, token: str):
         try:
             decoded_token = jwt.decode(token, JWT_SECRET_KEY, algorithms=[JWT_ALGORITHM])
             if decoded_token["expires"] >= time.time():
