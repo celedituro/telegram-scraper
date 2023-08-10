@@ -42,7 +42,6 @@ async def post_messages(client, messages, parser: MessageParser, token: str):
                 id = parsed_message["id"]
                 print(f'[CLIENT]: send {id} to server')
                 headers = {"Authorization": f"Bearer {token}"}
-                print(headers)
                 response = await client.post(f'{API_URL}/messages', json=parsed_message, headers=headers)
                 await handle_response(client, response)
     except Exception as e:
@@ -52,7 +51,7 @@ async def run(scraper: Scraper, parser: MessageParser, user: User):
     async with httpx.AsyncClient() as client:
         try:
             username = user["username"]
-            resp = await client.post(f'{API_URL}/users/signup', json=user)
+            resp = await client.post(f'{API_URL}/users', json=user)
             if resp.status_code == 201:
                 print(f"{username} has signup")
             resp = await client.post(f'{API_URL}/users/login', json=user)

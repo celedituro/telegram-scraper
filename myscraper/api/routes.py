@@ -83,7 +83,7 @@ def add_message(message: Message, username: str = Depends(verify_token)):
         raise HTTPException(status_code=500, detail='Error when adding new message: ' + str(e))
 
 @app.get("/messages", status_code=200, response_model=List[Message], responses=get_responses)
-def get_all_messages():
+def get_all_messages(username: str = Depends(verify_token)):
     """
     Get a list of messages.
     """
@@ -93,7 +93,7 @@ def get_all_messages():
         raise HTTPException(status_code=500, detail='Error in getting messages: ' + str(e))
 
 @app.get("/messages/link", status_code=200, response_model=List[LinkMessage], responses=get_responses)
-def get_link_messages():
+def get_link_messages(username: str = Depends(verify_token)):
     """
     Get a list of link messages.
     """
@@ -102,7 +102,7 @@ def get_link_messages():
     except Exception as e:
         raise HTTPException(status_code=500, detail='Error in getting link messages: ' + str(e))
 
-@app.post("/users/signup", status_code=201, response_model=UserSignupResponse, responses=user_signup_responses)
+@app.post("/users", status_code=201, response_model=UserSignupResponse, responses=user_signup_responses)
 def add_user(user: User):
     """
     Create a new user.
