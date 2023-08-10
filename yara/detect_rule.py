@@ -13,5 +13,5 @@ with open('messages.txt', 'r') as file:
 # Scan messages with rule
 for message in messages:
     matches = rules.match(data=message)
-    for match in matches:
-        print(f"Rule: {match.rule}")
+    if matches:
+        print(f"MATCH in {message}"+'\n')

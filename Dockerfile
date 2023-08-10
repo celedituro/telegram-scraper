@@ -22,4 +22,4 @@ COPY . /app
 EXPOSE 8000
 
 # Ejecuta los comandos al inicializar el contenedor
-CMD ["sh", "-c", "poetry run pytest myscraper/tests && poetry run uvicorn myscraper.main:app --host 0.0.0.0 --port 8000"]
+CMD ["sh", "-c", "poetry run pytest app/tests && poetry run uvicorn app.main:app --host 0.0.0.0 --port 8000"]

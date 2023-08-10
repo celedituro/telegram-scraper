@@ -20,7 +20,7 @@ Podes obtener el ``api_id`` y ``api_hash`` del proyecto ingresando a la siguient
 
 ``docker-compose up --build``
 
-**Paso 3)** Ubicarse en ``/myscraper`` y ejecutar:
+**Paso 3)** Ubicarse en ``/app`` y ejecutar:
 ``poetry run python client.py``
   
 ## Documentación
