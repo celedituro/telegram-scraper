@@ -160,6 +160,4 @@ cython_debug/
 #.idea/
 
 app/my_telegram_session.session
-
-yara/messages.txt
 app/messages.txt

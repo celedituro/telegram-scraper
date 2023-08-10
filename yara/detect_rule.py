@@ -1,13 +1,16 @@
 import yara
+import os
+
+script_directory = os.path.dirname(os.path.abspath(__file__))
+file_path = os.path.join(script_directory, "..", "app", "messages.txt")
 
 # Load rules from a file
 rules = yara.compile(filepath="detect_mercadolibre.yara")
 
 # Scan messages.txt in search of coincidences
-matches = rules.match(filepath="messages.txt")
+matches = rules.match(file_path)
 
-# Read messages file
-with open('messages.txt', 'r') as file:
+with open(file_path, 'r') as file:
     messages = file.readlines()
 
 # Scan messages with rule
