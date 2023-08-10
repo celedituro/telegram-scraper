@@ -1,9 +1,11 @@
 import asyncio
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
 import os
-from dotenv import load_dotenv
+
+from fastapi import FastAPI, HTTPException, Depends
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from typing import List
+from dotenv import load_dotenv
 from psycopg2 import IntegrityError
 
 from ..services.message_service import MessageService
@@ -14,7 +16,7 @@ from ..models.user_presenter import UserPresenter
 from ..models.encrypter import Encrypter
 from ..models.message import Message, LinkMessage
 from ..models.user import User, UserSignupResponse, UserLoginResponse
-from ..models.exceptions import UserNotFound
+from ..models.exceptions import UserNotFound, UserAlreadyExist, MessageAlreadyExist
 from ..database.database import Database
 from ..database.repositories.message_repository import MessageRepository
 from ..database.repositories.user_respository import UserRepository
@@ -41,6 +43,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Create an instance of HTTPBearer to handle the authentication header
+bearer = HTTPBearer()
+
 db = Database(DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT)
 db.create_tables()
 
@@ -54,19 +59,26 @@ user_presenter = UserPresenter()
 auth_service = AuthService()
 user_service = UserService(user_repository, encrypter, user_presenter)
 
+def verify_token(credentials: HTTPAuthorizationCredentials = Depends(bearer)):
+    try:
+        user = auth_service.decodeJWT(credentials.credentials)
+        return user
+    except Exception as e:
+        raise HTTPException(status_code=401, detail="Invalid Token")
+
 @app.get('/', status_code=200)
 def read_root():
     return {'Welcome to the Telegram Channels Scraper'}
 
 @app.post("/messages", status_code=201, response_model=Message, responses=message_post_responses)
-def add_message(message: Message):
+def add_message(message: Message, username: str = Depends(verify_token)):
     """
     Create a new message.
     """
     try:
         return message_service.add_message(message)
-    except IntegrityError:
-        raise HTTPException(status_code=400, detail="Message already exists", headers={"X-Error": "ItemDuplicate"})
+    except MessageAlreadyExist:
+        raise HTTPException(status_code=400, detail="Message Already Exist")
     except Exception as e:
         raise HTTPException(status_code=500, detail='Error when adding new message: ' + str(e))
 
@@ -97,8 +109,8 @@ def add_user(user: User):
     """
     try:
         return user_service.add_user(user)
-    except IntegrityError:
-        raise HTTPException(status_code=400, detail="User already exists", headers={"X-Error": "ItemDuplicate"})
+    except UserAlreadyExist:
+        raise HTTPException(status_code=400, detail="User Already Exist")
     except Exception as e:
         raise HTTPException(status_code=500, detail='Error when adding new user: ' + str(e))
 
@@ -108,11 +120,10 @@ def add_user(user: User):
     Create a user's login session.
     """
     try:
-        if user_service.login_user(user):
+        if user_service.login_user(user) is not None:
             token = auth_service.getJWT(user.username)
             return { "token": token }
-        raise UserNotFound('the user does not exist')
     except UserNotFound:
-        raise HTTPException(status_code=404, detail='the user does not exist')
+        raise HTTPException(status_code=404, detail='User Not Found')
     except Exception as e:
         raise HTTPException(status_code=500, detail='Error when logging user: ' + str(e))

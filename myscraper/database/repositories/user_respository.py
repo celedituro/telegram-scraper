@@ -15,8 +15,8 @@ class UserRepository:
             inserted_message = cursor.fetchone()
             self.db.connection.commit()
             cursor.close()
-            return inserted_message
             print(f"[USER REPOSITORY]: user {username} was added")
+            return inserted_message
         except IntegrityError as e:
             raise IntegrityError(e)
         except psycopg2.Error as e:
@@ -29,8 +29,10 @@ class UserRepository:
             cursor.execute(sql_sentence, (username,))
             user = cursor.fetchone()
             cursor.close()
-            return user
             print(f"[USER REPOSITORY]: user with username {username} got")
+            return user
+        except IntegrityError as e:
+            raise IntegrityError(e)
         except psycopg2.Error as e:
             print(f"[USER REPOSITORY]: Error when getting user {username}:", e)
             

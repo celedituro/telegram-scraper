@@ -12,6 +12,8 @@ class Database:
                 port=db_port
             )
             print("[DATABASE]: db connected")
+        except IntegrityError as e:
+            raise IntegrityError(e)
         except psycopg2.Error as e:
             print("[DATABASE]: Error when connecting to db:", e)
 
@@ -23,6 +25,8 @@ class Database:
             self.connection.commit()
             cursor.close()
             print("[DATABASE]: messages table created")
+        except IntegrityError as e:
+            raise IntegrityError(e)
         except psycopg2.Error as e:
             print("[DATABASE]: Error when creating messages table:", e)
 
@@ -34,6 +38,8 @@ class Database:
             self.connection.commit()
             cursor.close()
             print("[DATABASE]: users table created")
+        except IntegrityError as e:
+            raise IntegrityError(e)
         except psycopg2.Error as e:
             print("[DATABASE]: Error when creating users table:", e)
     
@@ -41,11 +47,18 @@ class Database:
         try:
             self.create_messages_table()
             self.create_users_table()
+        except IntegrityError as e:
+            raise IntegrityError(e)
         except psycopg2.Error as e:
             print("[DATABASE]: Error when creating tables:", e)
 
     def close(self):
-        self.connection.close()
-        print("[DATABASE]: db disconnected")
+        try:
+            self.connection.close()
+            print("[DATABASE]: db disconnected")
+        except IntegrityError as e:
+            raise IntegrityError(e)
+        except psycopg2.Error as e:
+            print("[DATABASE]: Error when disconnecting db", e)
 
 

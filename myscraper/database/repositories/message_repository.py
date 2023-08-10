@@ -14,8 +14,8 @@ class MessageRepository:
             cursor.execute(sql_sentence)
             messages = cursor.fetchall()
             cursor.close()
-            return messages
             print("[MESSAGE REPOSITORY]: got all messages")
+            return messages
         except psycopg2.Error as e:
             print("[MESSAGE REPOSITORY]: Error when getting all messages:", e)
             
@@ -27,8 +27,8 @@ class MessageRepository:
             inserted_message = cursor.fetchone()
             self.db.connection.commit()
             cursor.close()
-            return inserted_message
             print(f"[MESSAGE REPOSITORY]: message {id} was added")
+            return inserted_message
         except IntegrityError as e:
             raise IntegrityError(e)
         except psycopg2.Error as e:
@@ -41,7 +41,21 @@ class MessageRepository:
             cursor.execute(sql_sentence)
             messages = cursor.fetchall()
             cursor.close()
-            return messages
             print("[MESSAGE REPOSITORY]: got link messages")
+            return messages
         except psycopg2.Error as e:
             print("[MESSAGE REPOSITORY]: Error when getting link messages:", e)
+    
+    def get_message(self, id):
+        try:
+            cursor = self.db.connection.cursor()
+            sql_sentence = "SELECT * FROM messages WHERE id = %s"
+            cursor.execute(sql_sentence, (id,))
+            message = cursor.fetchone()
+            cursor.close()
+            print(f"[MESSAGE REPOSITORY]: message with id {id} got")
+            return message
+        except IntegrityError as e:
+            raise IntegrityError(e)
+        except psycopg2.Error as e:
+            print(f"[MESSAGE REPOSITORY]: Error when getting message {id}:", e)
