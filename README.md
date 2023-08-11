@@ -36,7 +36,7 @@ Ingresar a ``http://localhost:8000/docs`` para acceder a la documentación de la
 
 ## Informe
 
-[Link al informe](../../../Downloads/Informe.pdf)
+[[Link al informe](../../../Downloads/Informe.pdf)](https://github.com/celedituro/telegram-scraper/blob/main/Informe.pdf)
 
 ## Documentación
 
