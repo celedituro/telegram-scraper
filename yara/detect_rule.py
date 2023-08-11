@@ -1,5 +1,6 @@
 import yara
 import os
+from loguru import logger
 
 script_directory = os.path.dirname(os.path.abspath(__file__))
 file_path = os.path.join(script_directory, "..", "app", "messages.txt")
@@ -17,4 +18,4 @@ with open(file_path, 'r') as file:
 for message in messages:
     matches = rules.match(data=message)
     if matches:
-        print(f"MATCH in {message}"+'\n')
+        logger.info(f"MATCH in {message}"+'\n')

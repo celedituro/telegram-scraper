@@ -2,6 +2,7 @@ import asyncio
 import os
 import httpx
 import time
+from loguru import logger
 
 from dotenv import load_dotenv
 
@@ -31,9 +32,9 @@ def get_user_credentials():
 async def handle_response(client, response):
     if response.status_code == REDIRECTION_STATUS_CODE:
         new_location = response.headers.get('Location')
-        print(f'[CLIENT]: redirecting request to: {new_location}')
+        logger.info(f'[CLIENT]: redirecting request to: {new_location}')
         response = await client.post(new_location, json=data)
-    print("[CLIENT]: receive from server:", response.status_code)
+    logger.info(f"[CLIENT]: receive from server {response.status_code}")
 
 def parse_messages(messages, parser: MessageParser):
     parsed_messages = []
@@ -47,24 +48,23 @@ def save_messages(messages):
     try:
         with open('messages.txt', 'w', encoding='utf-8') as file:
             for message in messages:
-                print(message)
                 file.write(message["content"] + '\n')
                 time.sleep(1)
-        print("[CLIENT]: all messages has been wrote in file")
+        logger.info("[CLIENT]: all messages has been wrote in file")
     except Exception as e:
-        print("[CLIENT]: Error when writing messages in file:", e)
+        logger.error("[CLIENT]: Error when writing messages in file:", e)
              
 async def post_messages(client, parsed_messages, token: str):
     try:
         for parsed_message in parsed_messages:
             if parsed_message:
                 id = parsed_message["id"]
-                print(f'[CLIENT]: send {id} to server')
+                logger.info(f'[CLIENT]: send {id} to server')
                 headers = {"Authorization": f"Bearer {token}"}
                 response = await client.post(f'{API_URL}/messages', json=parsed_message, headers=headers)
                 await handle_response(client, response)
     except Exception as e:
-        print("[CLIENT]: Error when posting messages", e)  
+        logger.error(f"[CLIENT]: Error when posting messages {e}")  
           
 async def run(scraper: Scraper, parser: MessageParser, user: User):
     async with httpx.AsyncClient() as client:
@@ -72,18 +72,18 @@ async def run(scraper: Scraper, parser: MessageParser, user: User):
             username = user["username"]
             resp = await client.post(f'{API_URL}/users', json=user)
             if resp.status_code == 201:
-                print(f"{username} has signup")
+                logger.info(f"{username} has signup")
             resp = await client.post(f'{API_URL}/users/login', json=user)
             if resp.status_code == 201:
-                print(f"{username} has logged in")
+                logger.info(f"{username} has logged in")
             messages = await scraper.get_messages(PHONE_NUMBER, GROUP_USERNAME)
             parsed_messages = parse_messages(messages, parser)
             save_messages(parsed_messages)
             token = resp.json()["token"]
-            print("token:", token)
-            #await post_messages(client, parsed_messages, token)
+            logger.info(f"token: {token}")
+            await post_messages(client, parsed_messages, token)
         except Exception as e:
-            print("[CLIENT]: Error when running client", e)      
+            logger.error(f"[CLIENT]: Error when running client {e}")      
          
 if __name__ == '__main__':
     user = get_user_credentials()

@@ -20,6 +20,7 @@ pydantic = "^1.8.2"
 bcrypt = "^4.0.1"
 pyjwt = "^2.8.0"
 yara-python = "^4.3.1"
+loguru = "^0.7.0"
 
 [build-system]
 requires = ["poetry-core"]

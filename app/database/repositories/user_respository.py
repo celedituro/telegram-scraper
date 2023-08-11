@@ -1,5 +1,5 @@
 import psycopg2
-from psycopg2 import IntegrityError
+from loguru import logger
 
 from ..database import Database
 
@@ -15,12 +15,10 @@ class UserRepository:
             inserted_message = cursor.fetchone()
             self.db.connection.commit()
             cursor.close()
-            print(f"[USER REPOSITORY]: user {username} was added")
+            logger.info(f"[USER REPOSITORY]: user {username} was added")
             return inserted_message
-        except IntegrityError as e:
-            raise IntegrityError(e)
         except psycopg2.Error as e:
-            print(f"[USER REPOSITORY]: Error when inserting user {username}:", e)
+            logger.error(f"[USER REPOSITORY]: Error when inserting user {username}:", e)
     
     def get_user(self, username):
         try:
@@ -29,10 +27,8 @@ class UserRepository:
             cursor.execute(sql_sentence, (username,))
             user = cursor.fetchone()
             cursor.close()
-            print(f"[USER REPOSITORY]: user with username {username} got")
+            logger.info(f"[USER REPOSITORY]: user with username {username} got")
             return user
-        except IntegrityError as e:
-            raise IntegrityError(e)
         except psycopg2.Error as e:
-            print(f"[USER REPOSITORY]: Error when getting user {username}:", e)
+            logger.error(f"[USER REPOSITORY]: Error when getting user {username}:", e)
             

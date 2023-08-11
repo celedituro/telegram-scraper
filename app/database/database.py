@@ -1,5 +1,5 @@
 import psycopg2
-from psycopg2 import IntegrityError
+from loguru import logger
 
 class Database:
     def __init__(self, db_name, db_user, db_password, db_host, db_port):
@@ -11,11 +11,9 @@ class Database:
                 host=db_host,
                 port=db_port
             )
-            print("[DATABASE]: db connected")
-        except IntegrityError as e:
-            raise IntegrityError(e)
+            logger.info("[DATABASE]: db connected")
         except psycopg2.Error as e:
-            print("[DATABASE]: Error when connecting to db:", e)
+            logger.error("[DATABASE]: Error when connecting to db:", e)
 
     def create_messages_table(self):
         try:
@@ -24,11 +22,9 @@ class Database:
             cursor.execute(sql_sentence)
             self.connection.commit()
             cursor.close()
-            print("[DATABASE]: messages table created")
-        except IntegrityError as e:
-            raise IntegrityError(e)
+            logger.info("[DATABASE]: messages table created")
         except psycopg2.Error as e:
-            print("[DATABASE]: Error when creating messages table:", e)
+            logger.error("[DATABASE]: Error when creating messages table:", e)
 
     def create_users_table(self):
         try:
@@ -37,28 +33,22 @@ class Database:
             cursor.execute(sql_sentence)
             self.connection.commit()
             cursor.close()
-            print("[DATABASE]: users table created")
-        except IntegrityError as e:
-            raise IntegrityError(e)
+            logger.info("[DATABASE]: users table created")
         except psycopg2.Error as e:
-            print("[DATABASE]: Error when creating users table:", e)
+            logger.error("[DATABASE]: Error when creating users table:", e)
     
     def create_tables(self):
         try:
             self.create_messages_table()
             self.create_users_table()
-        except IntegrityError as e:
-            raise IntegrityError(e)
         except psycopg2.Error as e:
-            print("[DATABASE]: Error when creating tables:", e)
+            logger.error("[DATABASE]: Error when creating tables:", e)
 
     def close(self):
         try:
             self.connection.close()
-            print("[DATABASE]: db disconnected")
-        except IntegrityError as e:
-            raise IntegrityError(e)
+            logger.info("[DATABASE]: db disconnected")
         except psycopg2.Error as e:
-            print("[DATABASE]: Error when disconnecting db", e)
+            logger.error("[DATABASE]: Error when disconnecting db", e)
 
 
