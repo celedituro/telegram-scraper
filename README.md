@@ -34,6 +34,10 @@ Ingresar a ``http://localhost:8000/docs`` para acceder a la documentación de la
 
 **Paso 2)** Ejecutar el script para detectar si se cumple la regla definida en ``mercadolibre.yara``: ``poetry run python detect_rule.py``.
 
+## Informe
+
+[Link al informe](../../../Downloads/Informe.pdf)
+
 ## Documentación
 
 - <https://docs.telethon.dev/en/stable/index.html>
