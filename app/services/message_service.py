@@ -1,13 +1,16 @@
 from datetime import datetime
 
 from ..models.exceptions import MessageAlreadyExist
+from ..database.repositories.message_repository import MessageRepository
+from ..models.message_presenter import MessagePresenter
+from ..models.message import Message
 
 class MessageService:
-    def __init__(self, repository, presenter):
+    def __init__(self, repository: MessageRepository, presenter: MessagePresenter):
         self.repository = repository
         self.presenter = presenter
 
-    def add_message(self, message):
+    def add_message(self, message: Message):
         if self.repository.get_message(message.id) is None:
             new_message = self.repository.insert_message(message.id, message.channel_id, message.content, message.date, message.message_type.name)
             return self.presenter.present_message(new_message)

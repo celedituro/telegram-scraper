@@ -1,5 +1,6 @@
 import psycopg2
 from loguru import logger
+from datetime import date
 
 from ..database import Database
 
@@ -19,7 +20,7 @@ class MessageRepository:
         except psycopg2.Error as e:
             logger.error(f"[MESSAGE REPOSITORY]: Error when getting all messages - {e}")
             
-    def insert_message(self, id, channel_id, content, date, message_type):
+    def insert_message(self, id: int, channel_id: int, content: str, date: date, message_type: str):
         try:
             cursor = self.db.connection.cursor()
             sql_sentence = "INSERT INTO messages (id, channel_id, content, date, type) VALUES (%s, %s, %s, %s, %s) RETURNING *"
@@ -44,7 +45,7 @@ class MessageRepository:
         except psycopg2.Error as e:
             logger.error("[MESSAGE REPOSITORY]: Error when getting link messages - {e}")
     
-    def get_message(self, id):
+    def get_message(self, id: int):
         try:
             cursor = self.db.connection.cursor()
             sql_sentence = "SELECT * FROM messages WHERE id = %s"

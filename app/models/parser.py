@@ -4,10 +4,10 @@ from datetime import datetime
 from .message import MessageType
 
 class MessageParser:
-    def get_photo_content(self, photo_bytes):
+    def get_photo_content(self, photo_bytes: bytes):
         return base64.b64encode(photo_bytes).decode('utf-8')
     
-    def get_message_date(self, date, format):
+    def get_message_date(self, date: datetime, format):
         return date.strftime(format)
 
     def get_message_content(self, message):

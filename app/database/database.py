@@ -2,7 +2,7 @@ import psycopg2
 from loguru import logger
 
 class Database:
-    def __init__(self, db_name, db_user, db_password, db_host, db_port):
+    def __init__(self, db_name: str, db_user: str, db_password: str, db_host: str, db_port: str):
         try:
             self.connection = psycopg2.connect(
                 dbname=db_name,

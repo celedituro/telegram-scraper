@@ -5,10 +5,10 @@ from telethon import TelegramClient, sync
 from telethon.tl.types import InputMessagesFilterEmpty
 
 class Scraper:
-    def __init__(self, api_id, api_hash):
+    def __init__(self, api_id: str, api_hash: str):
         self.client = self.get_client(api_id, api_hash)
 
-    def get_client(self, api_id, api_hash):
+    def get_client(self, api_id: str, api_hash: str):
         """
         Get a telegram client to get messages from a group.
         
@@ -25,7 +25,7 @@ class Scraper:
         except Exception as e:
             logger.error(f"[SCRAPER]:  Error in getting client {e}")
 
-    async def get_group_entity(self, group_username):
+    async def get_group_entity(self, group_username: str):
         """
         Get a telegram entity using its username.
         
@@ -57,7 +57,7 @@ class Scraper:
         except Exception as e:
             logger.error(f"[SCRAPER]: Error in getting group messages {e}")
     
-    async def authorize_user(self, phone_number):
+    async def authorize_user(self, phone_number: str):
         """
         Authenticate a user to create a telegram session.
         
@@ -79,7 +79,7 @@ class Scraper:
         except Exception as e:
             logger.error(f"[SCRAPER]: Error when auth user {e}")
                         
-    async def get_messages_from_group(self, phone_number, group_username):
+    async def get_messages_from_group(self, phone_number: str, group_username: str):
         """
         Get all the messages from a given telegram group.
         

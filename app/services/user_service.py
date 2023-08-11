@@ -4,9 +4,12 @@ from datetime import datetime
 
 from ..models.exceptions import UserAlreadyExist, UserNotFound, IncorrectPassword
 from ..models.user import User
+from ..database.repositories.user_respository import UserRepository
+from ..models.encrypter import Encrypter
+from ..models.user_presenter import UserPresenter
 
 class UserService:
-    def __init__(self, repository, encrypter, presenter):
+    def __init__(self, repository: UserRepository, encrypter: Encrypter, presenter: UserPresenter):
         self.repository = repository
         self.encrypter = encrypter
         self.presenter = presenter

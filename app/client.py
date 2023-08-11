@@ -101,7 +101,7 @@ async def post_messages(client, parsed_messages, token: str):
     except Exception as e:
         logger.error(f"[CLIENT]: Error when posting messages {e}")
         
-async def authenticate_user(user, client):
+async def authenticate_user(user: User, client):
     """
     Authenticate user in API server.
     

@@ -7,7 +7,7 @@ class UserRepository:
     def __init__(self, database: Database):
         self.db = database
             
-    def insert_user(self, username, password):
+    def insert_user(self, username: str, password: str):
         try:
             cursor = self.db.connection.cursor()
             sql_sentence = "INSERT INTO users (username, password) VALUES (%s, %s) RETURNING *"
@@ -20,7 +20,7 @@ class UserRepository:
         except psycopg2.Error as e:
             logger.error(f"[USER REPOSITORY]: Error when inserting user {username} - {e}")
     
-    def get_user(self, username):
+    def get_user(self, username: str):
         try:
             cursor = self.db.connection.cursor()
             sql_sentence = "SELECT * FROM users WHERE username = %s"
