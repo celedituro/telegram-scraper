@@ -27,7 +27,7 @@ class UserRepository:
             cursor.execute(sql_sentence, (username,))
             user = cursor.fetchone()
             cursor.close()
-            logger.info(f"[USER REPOSITORY]: user with username {username} got")
+            logger.info(f"[USER REPOSITORY]: got user with username {username}")
             return user
         except psycopg2.Error as e:
             logger.error(f"[USER REPOSITORY]: Error when getting user {username} - {e}")

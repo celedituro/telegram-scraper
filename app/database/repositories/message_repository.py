@@ -52,7 +52,7 @@ class MessageRepository:
             cursor.execute(sql_sentence, (id,))
             message = cursor.fetchone()
             cursor.close()
-            logger.info(f"[MESSAGE REPOSITORY]: message with id {id} got")
+            logger.info(f"[MESSAGE REPOSITORY]: got message with id {id}")
             return message
         except psycopg2.Error as e:
             logger.error(f"[MESSAGE REPOSITORY]: Error when getting message {id} - {e}")
