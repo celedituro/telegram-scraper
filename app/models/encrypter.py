@@ -12,5 +12,5 @@ class Encrypter:
         except Exception as e:
             raise InvalidPassword('the password must be a string')
     
-    def check_password(self, plain_password, hashed_password):
+    def check_password(self, plain_password: str, hashed_password):
         return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password)

@@ -18,7 +18,7 @@ class UserRepository:
             logger.info(f"[USER REPOSITORY]: user {username} was added")
             return inserted_message
         except psycopg2.Error as e:
-            logger.error(f"[USER REPOSITORY]: Error when inserting user {username}:", e)
+            logger.error(f"[USER REPOSITORY]: Error when inserting user {username} - {e}")
     
     def get_user(self, username):
         try:
@@ -30,5 +30,5 @@ class UserRepository:
             logger.info(f"[USER REPOSITORY]: user with username {username} got")
             return user
         except psycopg2.Error as e:
-            logger.error(f"[USER REPOSITORY]: Error when getting user {username}:", e)
+            logger.error(f"[USER REPOSITORY]: Error when getting user {username} - {e}")
             

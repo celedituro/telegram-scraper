@@ -17,3 +17,8 @@ class MessageAlreadyExist(Exception):
     def __init__(self, message):
         self.message = message
         super().__init__(self.message)
+
+class IncorrectPassword(Exception):
+    def __init__(self, message):
+        self.message = message
+        super().__init__(self.message)

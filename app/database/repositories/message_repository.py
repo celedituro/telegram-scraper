@@ -17,7 +17,7 @@ class MessageRepository:
             logger.info("[MESSAGE REPOSITORY]: got all messages")
             return messages
         except psycopg2.Error as e:
-            logger.error("[MESSAGE REPOSITORY]: Error when getting all messages:", e)
+            logger.error(f"[MESSAGE REPOSITORY]: Error when getting all messages - {e}")
             
     def insert_message(self, id, channel_id, content, date, message_type):
         try:
@@ -30,7 +30,7 @@ class MessageRepository:
             logger.info(f"[MESSAGE REPOSITORY]: message {id} was added")
             return inserted_message
         except psycopg2.Error as e:
-            logger.error(f"[MESSAGE REPOSITORY]: Error when inserting message {id}:", e)
+            logger.error(f"[MESSAGE REPOSITORY]: Error when inserting message {id} - {e}")
             
     def get_link_messages(self):
         try:
@@ -42,7 +42,7 @@ class MessageRepository:
             logger.info("[MESSAGE REPOSITORY]: got link messages")
             return messages
         except psycopg2.Error as e:
-            logger.error("[MESSAGE REPOSITORY]: Error when getting link messages:", e)
+            logger.error("[MESSAGE REPOSITORY]: Error when getting link messages - {e}")
     
     def get_message(self, id):
         try:
@@ -54,4 +54,4 @@ class MessageRepository:
             logger.info(f"[MESSAGE REPOSITORY]: message with id {id} got")
             return message
         except psycopg2.Error as e:
-            logger.error(f"[MESSAGE REPOSITORY]: Error when getting message {id}:", e)
+            logger.error(f"[MESSAGE REPOSITORY]: Error when getting message {id} - {e}")
