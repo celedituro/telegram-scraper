@@ -20,7 +20,7 @@ from ..models.exceptions import UserNotFound, UserAlreadyExist, MessageAlreadyEx
 from ..database.database import Database
 from ..database.repositories.message_repository import MessageRepository
 from ..database.repositories.user_respository import UserRepository
-from ..utils.swagger_responses import message_post_responses, get_responses, user_signup_responses, user_login_responses
+from ..utils.responses import create_message_responses, get_messages_responses, create_user_responses, login_user_responses
 
 # Load environment variables from .env file
 load_dotenv()
@@ -70,7 +70,7 @@ def verify_token(credentials: HTTPAuthorizationCredentials = Depends(bearer)):
 def read_root():
     return {'Welcome to the Telegram Channels Scraper'}
 
-@app.post("/messages", status_code=201, response_model=Message, responses=message_post_responses)
+@app.post("/messages", status_code=201, response_model=Message, responses=create_message_responses)
 def add_message(message: Message, username: str = Depends(verify_token)):
     """
     Create a new message.
@@ -82,7 +82,7 @@ def add_message(message: Message, username: str = Depends(verify_token)):
     except Exception as e:
         raise HTTPException(status_code=500, detail='Error when adding new message: ' + str(e))
 
-@app.get("/messages", status_code=200, response_model=List[Message], responses=get_responses)
+@app.get("/messages", status_code=200, response_model=List[Message], responses=get_messages_responses)
 def get_all_messages(username: str = Depends(verify_token)):
     """
     Get a list of messages.
@@ -92,7 +92,7 @@ def get_all_messages(username: str = Depends(verify_token)):
     except Exception as e:
         raise HTTPException(status_code=500, detail='Error in getting messages: ' + str(e))
 
-@app.get("/messages/link", status_code=200, response_model=List[LinkMessage], responses=get_responses)
+@app.get("/messages/link", status_code=200, response_model=List[LinkMessage], responses=get_messages_responses)
 def get_link_messages(username: str = Depends(verify_token)):
     """
     Get a list of link messages.
@@ -102,7 +102,7 @@ def get_link_messages(username: str = Depends(verify_token)):
     except Exception as e:
         raise HTTPException(status_code=500, detail='Error in getting link messages: ' + str(e))
 
-@app.post("/users", status_code=201, response_model=UserSignupResponse, responses=user_signup_responses)
+@app.post("/users", status_code=201, response_model=UserSignupResponse, responses=create_user_responses)
 def add_user(user: User):
     """
     Create a new user.
@@ -114,7 +114,7 @@ def add_user(user: User):
     except Exception as e:
         raise HTTPException(status_code=500, detail='Error when adding new user: ' + str(e))
 
-@app.post("/users/login", status_code=201, response_model=UserLoginResponse, responses=user_login_responses)
+@app.post("/users/login", status_code=201, response_model=UserLoginResponse, responses=login_user_responses)
 def add_user(user: User):
     """
     Create a user's login session.
