@@ -1,4 +1,14 @@
 class MessagePresenter:
+    
+    """
+    Presents a message.
+    
+    Args:
+        message: dictionary.
+        
+    Returns:
+        A json object.
+    """
     def present_message(self, message):
         new_message = {
             "id": message[0],
@@ -9,6 +19,15 @@ class MessagePresenter:
         }
         return new_message
 
+    """
+    Presents a list of messages.
+    
+    Args:
+        messages: list of dictionaries.
+        
+    Returns:
+        A list of json objects.
+    """
     def present_all_messages(self, messages):
         new_messages = []
         for message in messages:
@@ -22,6 +41,15 @@ class MessagePresenter:
             new_messages.append(new_message)
         return new_messages
     
+    """
+    Presents a list of link messages.
+    
+    Args:
+        messages: list of dictionaries.
+        
+    Returns:
+        A list of json objects.
+    """
     def present_link_messages(self, link_messages):
         new_link_messages = []
         for message in link_messages:

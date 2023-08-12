@@ -1,4 +1,14 @@
 class UserPresenter:
+    
+    """
+    Presents a user.
+    
+    Args:
+        user: dictionary.
+        
+    Returns:
+        A dictionary with username and password.
+    """
     def present_user(self, user):
         new_user = {
             "username": user[0],
