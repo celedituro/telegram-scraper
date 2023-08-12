@@ -30,7 +30,7 @@ class MessageParser:
         return message_type
             
     def parse_message(self, message):
-        # Ignore MessageService messages
+        # ignore MessageService messages
         if message.message or message.media:
             msg = {
                 "id": message.id,
