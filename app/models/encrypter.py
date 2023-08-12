@@ -1,6 +1,6 @@
 import bcrypt
 
-from ..models.exceptions import InvalidPassword
+from ..exceptions.user_exceptions import InvalidPassword
 
 class Encrypter:
     def encrypt_password(self, password: str):

@@ -2,7 +2,7 @@ from datetime import datetime
 
 from ..models.message_presenter import MessagePresenter
 from ..models.user_presenter import UserPresenter
-from ..models.message import Message, MessageType
+from ..models.data_models import Message, MessageType
 
 def test_01_present_message():
     message_presenter = MessagePresenter()

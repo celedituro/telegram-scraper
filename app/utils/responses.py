@@ -1,5 +1,4 @@
-from ..models.message import Message
-from ..models.user import UserSignupResponse, UserLoginResponse
+from ..models.data_models import Message, UserSignupResponse, UserLoginResponse
 
 create_message_responses = {
     201: {"description": "Created", "model": Message},

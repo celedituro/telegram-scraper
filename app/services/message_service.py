@@ -1,9 +1,9 @@
 from datetime import datetime
 
-from ..models.exceptions import MessageAlreadyExist
+from ..exceptions.message_exceptions import MessageAlreadyExist
 from ..database.repositories.message_repository import MessageRepository
 from ..models.message_presenter import MessagePresenter
-from ..models.message import Message
+from ..models.data_models import Message
 
 class MessageService:
     def __init__(self, repository: MessageRepository, presenter: MessagePresenter):

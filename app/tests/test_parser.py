@@ -4,7 +4,7 @@ from unittest.mock import Mock
 from telethon.tl.types import MessageMediaPhoto, MessageMediaWebPage
 
 from ..models.parser import MessageParser
-from ..models.message import MessageType
+from ..models.data_models import MessageType
 
 def test_01_get_photo_content():
     parser = MessageParser()

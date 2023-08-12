@@ -1,7 +1,7 @@
 from telethon.tl.types import InputMessagesFilterEmpty, MessageMediaPhoto, MessageMediaWebPage
 import base64
 from datetime import datetime
-from .message import MessageType
+from .data_models import MessageType
 
 class MessageParser:
     def get_photo_content(self, photo_bytes: bytes):

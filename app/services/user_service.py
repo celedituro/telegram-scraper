@@ -2,8 +2,8 @@ import base64
 
 from datetime import datetime
 
-from ..models.exceptions import UserAlreadyExist, UserNotFound, IncorrectPassword
-from ..models.user import User
+from ..exceptions.user_exceptions import UserAlreadyExist, UserNotFound, IncorrectPassword
+from ..models.data_models import User
 from ..database.repositories.user_respository import UserRepository
 from ..models.encrypter import Encrypter
 from ..models.user_presenter import UserPresenter

@@ -19,3 +19,14 @@ class LinkMessage(BaseModel):
     channel_id: int
     content: str
     date: date
+        
+class User(BaseModel):
+    username: str
+    password: str
+    
+class UserSignupResponse(BaseModel):
+    username: str
+    hashed_password: str
+    
+class UserLoginResponse(BaseModel):
+    token: str

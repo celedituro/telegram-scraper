@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 from models.parser import MessageParser
 from models.scraper import Scraper
-from models.user import User
+from models.data_models import User
 
 load_dotenv()
 

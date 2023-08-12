@@ -14,9 +14,9 @@ from ..services.auth_service import AuthService
 from ..models.message_presenter import MessagePresenter
 from ..models.user_presenter import UserPresenter
 from ..models.encrypter import Encrypter
-from ..models.message import Message, LinkMessage
-from ..models.user import User, UserSignupResponse, UserLoginResponse
-from ..models.exceptions import UserNotFound, UserAlreadyExist, MessageAlreadyExist, IncorrectPassword
+from ..models.data_models import Message, LinkMessage, User, UserSignupResponse, UserLoginResponse
+from ..exceptions.message_exceptions import MessageAlreadyExist
+from ..exceptions.user_exceptions import UserNotFound, UserAlreadyExist, IncorrectPassword
 from ..database.database import Database
 from ..database.repositories.message_repository import MessageRepository
 from ..database.repositories.user_respository import UserRepository
