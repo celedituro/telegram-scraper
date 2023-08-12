@@ -12,7 +12,6 @@ from models.data_models import User
 
 load_dotenv()
 
-API_URL = os.environ.get('API_URL')
 API_ID = os.environ.get('API_ID')
 API_HASH = os.environ.get('API_HASH')
 PHONE_NUMBER = os.environ.get('PHONE_NUMBER')
@@ -96,7 +95,7 @@ async def post_messages(client, parsed_messages, token: str):
                 id = parsed_message["id"]
                 logger.info(f'[CLIENT]: send message {id} to server')
                 headers = {"Authorization": f"Bearer {token}"}
-                response = await client.post(f'{API_URL}/messages', json=parsed_message, headers=headers)
+                response = await client.post('http://localhost:8000/messages', json=parsed_message, headers=headers)
                 await handle_response(client, response)
     except Exception as e:
         logger.error(f"[CLIENT]: Error when posting messages {e}")
@@ -115,10 +114,10 @@ async def authenticate_user(user: User, client):
     """
     try:
         username = user["username"]
-        resp = await client.post(f'{API_URL}/users', json=user)
+        resp = await client.post('http://localhost:8000/users', json=user)
         if resp.status_code == 201:
             logger.info(f"[CLIENT]: {username} has signup")
-        resp = await client.post(f'{API_URL}/users/login', json=user)
+        resp = await client.post('http://localhost:8000/users/login', json=user)
         if resp.status_code == 201:
             logger.info(f"[CLIENT]: {username} has logged in")    
         token = resp.json()["token"]
