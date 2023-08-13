@@ -15,3 +15,9 @@ class UserPresenter:
             "hashed_password": user[1],
         }
         return new_user
+    
+    def present_user_token(self, token):
+        token = {
+            "token": token
+        }
+        return token

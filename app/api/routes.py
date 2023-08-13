@@ -16,7 +16,7 @@ from ..models.user_presenter import UserPresenter
 from ..models.encrypter import Encrypter
 from ..models.data_models import Message, LinkMessage, User, UserSignupResponse, UserLoginResponse
 from ..exceptions.message_exceptions import MessageAlreadyExist
-from ..exceptions.user_exceptions import UserNotFound, UserAlreadyExist, IncorrectPassword
+from ..exceptions.user_exceptions import UserNotFound, UserAlreadyExist, IncorrectPassword, InvalidPassword
 from ..database.database import Database
 from ..database.repositories.message_repository import MessageRepository
 from ..database.repositories.user_respository import UserRepository
@@ -109,6 +109,8 @@ def add_user(user: User):
     """
     try:
         return user_service.add_user(user)
+    except InvalidPassword:
+        raise HTTPException(status_code=404, detail="Invalid password")
     except UserAlreadyExist:
         raise HTTPException(status_code=400, detail="User Already Exist")
     except Exception as e:
@@ -122,7 +124,7 @@ def add_user(user: User):
     try:
         if user_service.login_user(user) is not None:
             token = auth_service.getJWT(user.username)
-            return { "token": token }
+            return user_service.presenter.present_user_token(token)
     except IncorrectPassword:
         raise HTTPException(status_code=400, detail='Incorrect Password')
     except UserNotFound:
