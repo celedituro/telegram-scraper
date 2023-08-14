@@ -4,18 +4,41 @@ from datetime import datetime
 from .data_models import MessageType
 
 class MessageParser:
+    """
+    Creates an instance of the message parser.
+    
+    Returns:
+        A message parser.
+    """
+    def __init__(self):
+        self.media_handlers = {
+            MessageMediaPhoto: self.get_photo_content,
+            MessageMediaWebPage: self.get_webpage_content
+        }
     
     """
     Gets the content of a photo message.
     
     Args:
-        photo_bytes: bytes of the photo.
+        media: a telegram photo media.
         
     Returns:
         A string encoded with base64.
     """
-    def get_photo_content(self, photo_bytes: bytes):
-        return base64.b64encode(photo_bytes).decode('utf-8')
+    def get_photo_content(self, media):
+        return base64.b64encode(media.photo.sizes[0].bytes).decode('utf-8')
+    
+    """
+    Gets the content of a webpage message.
+    
+    Args:
+        media: a telegram url media.
+        
+    Returns:
+        A string.
+    """
+    def get_webpage_content(self, media):
+        return media.webpage.url
     
     """
     Gets the message date in a given format.
@@ -40,14 +63,10 @@ class MessageParser:
         A string.
     """
     def get_message_content(self, message):
-        content = message.message
-        if message.media:
-            if isinstance(message.media, MessageMediaPhoto):
-                content = self.get_photo_content(message.media.photo.sizes[0].bytes)
-            if isinstance(message.media, MessageMediaWebPage):
-                content = message.media.webpage.url
-                
-        return content
+        media_handler = self.media_handlers.get(type(message.media))
+        if media_handler:
+            return media_handler(message.media)
+        return message.message
     
     """
     Gets the message type of the message.
@@ -59,13 +78,11 @@ class MessageParser:
         An instance of MessageType.
     """
     def get_message_type(self, message):
-        message_type = MessageType.text
-        if message.media:
-            if isinstance(message.media, MessageMediaPhoto):
-                message_type = MessageType.photo
-            if isinstance(message.media, MessageMediaWebPage):
-                message_type = MessageType.link
-        return message_type
+        media_type = type(message.media) if message.media else None
+        return {
+            MessageMediaPhoto: MessageType.photo,
+            MessageMediaWebPage: MessageType.link
+        }.get(media_type, MessageType.text)
     
     """
     Parses a message received from Telegram into a Message type.
