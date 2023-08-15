@@ -51,11 +51,11 @@ Para poder realizar consultas a la API es necesario registrar y loggear un usuar
 
 **Paso 1)** Abrir una nueva terminal y ejecutar ``poetry install`` para instalar todas las dependencias del proyecto.
 
-**Paso 2)** En la nueva termianl, ubicarse en el directorio ``/yara`` y ejecutar el comando ``poetry run python detect_rule.py``.
+**Paso 2)** En la nueva terminal, ubicarse en el directorio ``/yara`` y ejecutar el comando ``poetry run python detect_rule.py``.
 
 ## Informe
 
-[[Link al informe](../../../Downloads/Informe.pdf)](https://github.com/celedituro/telegram-scraper/blob/main/Informe.pdf)
+[[Link al informe](../../../Downloads/Informe.pdf)](https://github.com/celedituro/telegram-scraper/blob/main/informe.pdf)
 
 ## Documentación
 
