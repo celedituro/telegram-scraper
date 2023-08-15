@@ -17,6 +17,7 @@ from ..models.encrypter import Encrypter
 from ..models.data_models import Message, LinkMessage, User, UserSignupResponse, UserLoginResponse
 from ..exceptions.message_exceptions import MessageAlreadyExist
 from ..exceptions.user_exceptions import UserNotFound, UserAlreadyExist, IncorrectPassword, InvalidPassword
+from ..exceptions.auth_exceptions import ExpiredToken, InvalidToken
 from ..database.database import Database
 from ..database.repositories.message_repository import MessageRepository
 from ..database.repositories.user_respository import UserRepository
@@ -63,8 +64,10 @@ def verify_token(credentials: HTTPAuthorizationCredentials = Depends(bearer)):
     try:
         user = auth_service.decodeJWT(credentials.credentials)
         return user
-    except Exception as e:
+    except InvalidToken as e:
         raise HTTPException(status_code=401, detail="Invalid Token")
+    except ExpiredToken as e:
+        raise HTTPException(status_code=401, detail="Expired Token")
 
 @app.get('/', status_code=200)
 def read_root():
@@ -77,6 +80,10 @@ def add_message(message: Message, username: str = Depends(verify_token)):
     """
     try:
         return message_service.add_message(message)
+    except InvalidToken as e:
+        raise HTTPException(status_code=401, detail="Invalid Token")
+    except ExpiredToken as e:
+        raise HTTPException(status_code=401, detail="Expired Token")
     except MessageAlreadyExist:
         raise HTTPException(status_code=400, detail="Message Already Exist")
     except Exception as e:
@@ -89,6 +96,10 @@ def get_all_messages(username: str = Depends(verify_token)):
     """
     try:
         return message_service.get_all_messages()
+    except InvalidToken as e:
+        raise HTTPException(status_code=401, detail="Invalid Token")
+    except ExpiredToken as e:
+        raise HTTPException(status_code=401, detail="Expired Token")
     except Exception as e:
         raise HTTPException(status_code=500, detail='Error in getting messages: ' + str(e))
 
@@ -99,6 +110,10 @@ def get_link_messages(username: str = Depends(verify_token)):
     """
     try:
         return message_service.get_link_messages()
+    except InvalidToken as e:
+        raise HTTPException(status_code=401, detail="Invalid Token")
+    except ExpiredToken as e:
+        raise HTTPException(status_code=401, detail="Expired Token")
     except Exception as e:
         raise HTTPException(status_code=500, detail='Error in getting link messages: ' + str(e))
 

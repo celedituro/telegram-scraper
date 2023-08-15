@@ -1,7 +1,11 @@
 import jwt
 import os
-from dotenv import load_dotenv
 import time
+
+from dotenv import load_dotenv
+from loguru import logger
+
+from ..exceptions.auth_exceptions import ExpiredToken, InvalidToken
 
 load_dotenv()
 JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
@@ -57,6 +61,10 @@ class AuthService:
             decoded_token = jwt.decode(token, JWT_SECRET_KEY, algorithms=[JWT_ALGORITHM])
             if decoded_token["expires"] >= time.time():
                 return decoded_token['username']
-            raise Exception('Expired token')
-        except:
-            raise Exception('Invalid token')
+            raise ExpiredToken('The token is expired')
+        except ExpiredToken as e:
+            logger.error(f"[AUTH]: Error when decoding JWT {e}")
+            raise ExpiredToken('The token is expired')
+        except Exception as e:
+            logger.error(f"[AUTH]: Error when decoding JWT {e}")
+            raise InvalidToken('The token is invalid')
