@@ -53,7 +53,7 @@ Ingresar a ``http://localhost:8000/docs`` para acceder a la documentación de la
 
 ## YARA
 
-## Ejecución de la regla YARA
+### Ejecución de la regla YARA
 
 **Paso 1)** Abrir una nueva terminal, ubicarse en el directorio ``/yara`` y ejecutar ``pip install -r requirements_yara.txt`` para instalar todas las dependencias necesarias para ejecutar la regla.
 
