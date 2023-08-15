@@ -32,4 +32,5 @@ class InputController:
             return user
         except Exception as e:
             logger.error(f"[INPUT CONTROLLER]: {e}")
+            raise ValueError("Both username and password must have a value.")
             return None

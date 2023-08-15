@@ -94,11 +94,14 @@ async def run(scraper: Scraper, parser: MessageParser, user_auth: UserAuth, file
             logger.error(f"[CLIENT]: {e}")      
          
 if __name__ == '__main__':
-    controller = InputController()
-    user = controller.get_user_credentials()
-    if user:
-        scraper = Scraper(API_ID, API_HASH)
-        parser = MessageParser()
-        user_auth = UserAuth()
-        file_saver = FileSaver()
-        asyncio.run(run(scraper, parser, user_auth, file_saver, user))
+    try:
+        controller = InputController()
+        user = controller.get_user_credentials()
+        if user:
+            scraper = Scraper(API_ID, API_HASH)
+            parser = MessageParser()
+            user_auth = UserAuth()
+            file_saver = FileSaver()
+            asyncio.run(run(scraper, parser, user_auth, file_saver, user))
+    except Exception as e:
+        logger.error(f"[CLIENT]: {e}")      
