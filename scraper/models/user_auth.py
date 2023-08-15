@@ -6,7 +6,24 @@ sys.path.append("..")
 from api.models.data_models import User
 
 class UserAuth:
+    """
+    A class for handling user authentication operations such as signing up and logging in.
+    """
+    
     async def signup_user(self, client, user: User):
+        """
+        Sign up a new user by sending a POST request to the user registration endpoint.
+
+        Args:
+            client (httpx.AsyncClient): An asynchronous HTTP client used to make requests.
+            user (User): A dictionary containing user registration data.
+
+        Raises:
+            Exception: If an error occurs during the signup process.
+
+        Returns:
+            None
+        """
         try: 
             username = user["username"]
             resp = await client.post('http://localhost:8000/users', json=user)
@@ -18,6 +35,19 @@ class UserAuth:
             raise Exception("Error when signing up user")
             
     async def login_user(self, client, user: User):
+        """
+        Login a user by sending a POST request to the user login endpoint.
+
+        Args:
+            client (httpx.AsyncClient): An asynchronous HTTP client used to make requests.
+            user (User): A dictionary containing user login data.
+
+        Raises:
+            Exception: If an error occurs during the login process.
+
+        Returns:
+            str: The authentication token received upon successful login.
+        """
         try:
             username = user["username"]
             resp = await client.post('http://localhost:8000/users/login', json=user)

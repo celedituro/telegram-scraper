@@ -2,6 +2,10 @@ from loguru import logger
 import time
 
 class FileSaver:
+    """
+    A class for saving messages to a file.
+    """
+    
     def save_messages(self, messages):
         """
         Saves messages to a file.

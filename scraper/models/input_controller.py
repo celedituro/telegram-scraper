@@ -1,6 +1,10 @@
 from loguru import logger
 
 class InputController:
+    """
+    A class for validating user credentials.
+    """
+    
     def get_user_credentials(self):
         """
         This function prompts the user for a username and password,
