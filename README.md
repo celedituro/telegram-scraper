@@ -39,13 +39,13 @@ Para poder realizar consultas a la API es necesario registrar y loggear un usuar
 
 **Paso 1)** Ingresar a ``http://localhost:8000/docs``.
 
-**Paso 2)** Registrar un usuario con ``username`` y ``password``.
+**Paso 2)** Registrar un usuario con ``username`` y ``password`` con el endpoint ``POST /users``.
 
-**Paso 3)** Loggear el usuario registrado para obtener el ``token`` de acceso.
+**Paso 3)** Loggear el usuario registrado para obtener el ``token`` de acceso con el endpoint ``POST /users/login``.
 
-**Paso 4)** Copiar el token recibido al loggear el usuario y pegarlo en la sección ``Authorize`` que se encuentra en la parte superior de la documentarión de la API.
+**Paso 4)** Copiar el token recibido al loggear el usuario y pegarlo en la sección ``Authorize`` que se encuentra en la parte superior de la documentación de la API.
 
-**Paso 5)** Realizar una consulta. Si el token expira, repetir pasos 2 y 3.
+**Paso 5)** Realizar una consulta: ``GET /messages`` para extraer todos los mensajes del canal de Telegram o ``GET /messages/link`` para extraer todos los links compartidos en el canal de Telegram. Si el token expira, repetir los pasos 2 y 3.
 
 ## Ejecución de la regla YARA
 

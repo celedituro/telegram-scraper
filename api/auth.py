@@ -5,14 +5,14 @@ import time
 from dotenv import load_dotenv
 from loguru import logger
 
-from ..exceptions.auth_exceptions import ExpiredToken, InvalidToken
+from .exceptions.auth_exceptions import ExpiredToken, InvalidToken
 
 load_dotenv()
 JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
 JWT_ALGORITHM = os.getenv('JWT_ALGORITHM')
 JWT_ACCESS_TOKEN_EXPIRE_MINUTES = float(os.getenv('JWT_ACCESS_TOKEN_EXPIRE_MINUTES'))
 
-class AuthService:
+class Auth:
     """
     A class responsible for handling authentication using JSON Web Tokens (JWT).
 

@@ -10,7 +10,7 @@ from psycopg2 import IntegrityError
 
 from .services.message_service import MessageService
 from .services.user_service import UserService
-from .services.auth_service import AuthService
+from .auth import Auth
 from .models.message_presenter import MessagePresenter
 from .models.user_presenter import UserPresenter
 from .models.encrypter import Encrypter
@@ -57,12 +57,12 @@ message_presenter = MessagePresenter()
 message_service = MessageService(message_repository, message_presenter)
 encrypter = Encrypter()
 user_presenter = UserPresenter()
-auth_service = AuthService()
+auth_handler = Auth()
 user_service = UserService(user_repository, encrypter, user_presenter)
 
 def verify_token(credentials: HTTPAuthorizationCredentials = Depends(bearer)):
     try:
-        user = auth_service.decodeJWT(credentials.credentials)
+        user = auth_handler.decodeJWT(credentials.credentials)
         return user
     except InvalidToken as e:
         raise HTTPException(status_code=401, detail="Invalid Token")
@@ -138,7 +138,7 @@ def add_user(user: User):
     """
     try:
         if user_service.login_user(user) is not None:
-            token = auth_service.getJWT(user.username)
+            token = auth_handler.getJWT(user.username)
             return user_service.presenter.present_user_token(token)
     except IncorrectPassword:
         raise HTTPException(status_code=400, detail='Incorrect Password')
