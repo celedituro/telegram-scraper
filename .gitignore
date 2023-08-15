@@ -159,5 +159,5 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-app/my_telegram_session.session
-app/messages.txt
+scraper/my_telegram_session.session
+scraper/messages.txt
