@@ -45,9 +45,9 @@ Los valores ``API_ID`` y ``API_HASH`` de un nuevo proyecto se pueden obtener ing
 
 Una vez levantado el servidor de la API:
 
-**Paso 1)** Abrir una nueva terminal y ejecutar el comando ``poetry install`` para instalar todas las dependencias del proyecto.
+**Paso 1)** Abrir una nueva terminal, ubicarse en el directorio ``/scraper`` y ejecutar el comando ``pip install -r requirements_scraper.txt`` para instalar las dependencias necesarias para ejecutar el scraper.
 
-**Paso 2)** En la nueva terminal, ubicarse en el directorio ``/scraper`` y ejecutar el comando ``poetry run python client.py`` para extraer los mensajes del grupo de Telegram.
+**Paso 2)** Ejecutar el comando ``python client.py`` para extraer los mensajes del grupo de Telegram.
   
 Ingresar a ``http://localhost:8000/docs`` para acceder a la documentación de la API. Se pueden realizar consultas acerca del historial de mensajes del grupo así como de los links compartidos en el mismo por medio de la misma.
 
@@ -55,9 +55,9 @@ Ingresar a ``http://localhost:8000/docs`` para acceder a la documentación de la
 
 ## Ejecución de la regla YARA
 
-**Paso 1)** Abrir una nueva terminal y ejecutar ``poetry install`` para instalar todas las dependencias del proyecto.
+**Paso 1)** Abrir una nueva terminal, ubicarse en el directorio ``/yara`` y ejecutar ``pip install -r requirements_yara.txt`` para instalar todas las dependencias necesarias para ejecutar la regla.
 
-**Paso 2)** En la nueva terminal, ubicarse en el directorio ``/yara`` y ejecutar el comando ``poetry run python detect_rule.py``.
+**Paso 2)** Ejecutar el comando ``python detect_rule.py`` para ejecutar la regla.
 
 ## Informe
 
