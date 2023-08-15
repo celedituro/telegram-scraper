@@ -12,6 +12,7 @@ from api.models.data_models import User
 from models.input_controller import InputController
 from models.user_auth import UserAuth
 from models.file_saver import FileSaver
+from utils.constants import API_URL
 
 load_dotenv()
 
@@ -59,7 +60,7 @@ async def post_messages(client, parsed_messages, token: str):
                 id = parsed_message["id"]
                 headers = {"Authorization": f"Bearer {token}"}
                 logger.info(f'[CLIENT]: post message {id}')
-                response = await client.post('http://localhost:8000/messages', json=parsed_message, headers=headers)
+                response = await client.post(f'{API_URL}/messages', json=parsed_message, headers=headers)
                 await handle_response(client, response)
     except httpx.RequestError as request_error:
         logger.error(f"[CLIENT]: {request_error}")

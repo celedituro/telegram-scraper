@@ -4,6 +4,7 @@ import sys
 sys.path.append("..")
 
 from api.models.data_models import User
+from scraper.utils.constants import API_URL
 
 class UserAuth:
     """
@@ -26,7 +27,7 @@ class UserAuth:
         """
         try: 
             username = user["username"]
-            resp = await client.post('http://localhost:8000/users', json=user)
+            resp = await client.post(f'{API_URL}/users', json=user)
             logger.info(f"[AUTH USER]: receive {resp.status_code} when signing up {username}")
         except httpx.RequestError as request_error:
             logger.error(f"[AUTH USER]: {request_error}")
@@ -50,7 +51,7 @@ class UserAuth:
         """
         try:
             username = user["username"]
-            resp = await client.post('http://localhost:8000/users/login', json=user)
+            resp = await client.post(f'{API_URL}/users/login', json=user)
             logger.info(f"[AUTH USER]: receive {resp.status_code} when logging in {username}")
             token = resp.json()["token"]
             return token
