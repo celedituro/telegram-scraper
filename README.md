@@ -55,7 +55,7 @@ Para poder realizar consultas a la API es necesario registrar y loggear un usuar
 
 ## Informe
 
-[[Link al informe](../../../Downloads/Informe.pdf)](https://github.com/celedituro/telegram-scraper/blob/main/informe.pdf)
+[Link al informe](https://github.com/celedituro/telegram-scraper/blob/main/Informe.pdf)
 
 ## Documentación
 
