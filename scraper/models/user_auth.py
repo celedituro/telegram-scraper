@@ -1,4 +1,3 @@
-import httpx
 from loguru import logger
 import sys
 sys.path.append("..")
@@ -29,11 +28,8 @@ class UserAuth:
             username = user["username"]
             resp = await client.post(f'{API_URL}/users', json=user)
             logger.info(f"[AUTH USER]: receive {resp.status_code} when signing up {username}")
-        except httpx.RequestError as request_error:
-            logger.error(f"[AUTH USER]: {request_error}")
         except Exception as e:
-            logger.error(f"[AUTH USER]: {e}")
-            raise Exception("Error when signing up user")
+            raise Exception(e)
             
     async def login_user(self, client, user: User):
         """
@@ -55,11 +51,8 @@ class UserAuth:
             logger.info(f"[AUTH USER]: receive {resp.status_code} when logging in {username}")
             token = resp.json()["token"]
             return token
-        except httpx.RequestError as request_error:
-            logger.error(f"[AUTH USER]: {request_error}")
         except Exception as e:
-            logger.error(f"[AUTH USER]: {e}")
-            raise Exception("Error when logging in user")
+            raise Exception(e)
             
     async def auth_user(self, client, user: User):
         """
@@ -81,8 +74,6 @@ class UserAuth:
             token = await self.login_user(client, user)
             if token:
                 return token
-        except httpx.RequestError as request_error:
-            logger.error(f"[AUTH USER]: {request_error}")
         except Exception as e:
             logger.error(f"[AUTH USER]: {e}") 
             return None

@@ -52,7 +52,8 @@ class Scraper:
             logger.info('[SCRAPER]: getting telegram client')
             return TelegramClient('my_telegram_session', api_id, api_hash)
         except Exception as e:
-            logger.error(f"[SCRAPER]:  Error in getting client {e}")
+            raise Exception(e)
+            return None
 
     async def get_group_entity(self, group_username: str):
         """
@@ -68,8 +69,9 @@ class Scraper:
             logger.info('[SCRAPER]: getting group entity')
             return await self.client.get_entity(group_username)    
         except Exception as e:
-            logger.error(f"[SCRAPER]: Error in getting group entity {e}")
-
+            raise Exception(e)
+            return None
+        
     async def get_group_messages(self, entity):
         """
         Retrieves messages from a Telegram group.
@@ -84,7 +86,8 @@ class Scraper:
             logger.info('[SCRAPER]: getting group messages')
             return await self.client.get_messages(entity, limit=100, filter=InputMessagesFilterEmpty())
         except Exception as e:
-            logger.error(f"[SCRAPER]: Error in getting group messages {e}")
+            raise Exception(e)
+            return None
     
     async def authorize_user(self, phone_number: str):
         """
@@ -103,8 +106,8 @@ class Scraper:
                 code = input("Verification code: ")
                 await self.client.sign_in(phone_number, code)
         except Exception as e:
-            logger.error(f"[SCRAPER]: Error when auth user {e}")
-                        
+            raise Exception(e)
+
     async def get_messages_from_group(self, phone_number: str, group_username: str):
         """
         Retrieves messages from a Telegram group.
@@ -123,9 +126,12 @@ class Scraper:
         try:
             await self.authorize_user(phone_number)
             entity = await self.get_group_entity(group_username)
-            messages = await self.get_group_messages(entity)
-            self.client.disconnect()
-            return messages
+            if entity:
+                messages = await self.get_group_messages(entity)
+                if messages:
+                    self.client.disconnect()
+                    return messages
         except Exception as e:
-            logger.error(f"[SCRAPER]: Error in getting messages {e}")
-    
+            logger.error(f"[SCRAPER]: {e}")
+            raise Exception(e)    
+            return None

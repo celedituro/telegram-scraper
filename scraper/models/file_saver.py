@@ -25,3 +25,4 @@ class FileSaver:
             logger.info("[FILE SAVER]: messages saved")
         except Exception as e:
             logger.error(f"[FILE SAVER]: {e}")
+            raise Exception(e)
