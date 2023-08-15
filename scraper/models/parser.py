@@ -111,3 +111,24 @@ class MessageParser:
                 "message_type": self.get_message_type(message)
             }
             return msg
+    
+    def parse_messages(self, messages):
+        """
+        Parses Telegram messages.
+        
+        Args:
+            messages (list): List of messages from a Telegram group.
+            
+        Returns:
+            list: Parsed Telegram messages.
+            
+        Notes:
+            This function iterates through the provided list of messages and uses the provided
+            parser to parse each message. If a parsed message is obtained it is added to the list of parsed messages.
+        """
+        parsed_messages = []
+        for message in messages:
+            parsed_message = self.parse_message(message)
+            if parsed_message is not None:
+                parsed_messages.append(parsed_message)
+        return parsed_messages
