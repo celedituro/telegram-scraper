@@ -1,7 +1,6 @@
 import asyncio
 import os
 import httpx
-import time
 from loguru import logger
 from dotenv import load_dotenv
 import sys
@@ -12,6 +11,7 @@ from models.scraper import Scraper
 from api.models.data_models import User
 from models.input_controller import InputController
 from models.user_auth import UserAuth
+from models.file_saver import FileSaver
 
 load_dotenv()
 
@@ -39,27 +39,7 @@ async def handle_response(client, response):
         logger.info(f'[CLIENT]: redirecting request to: {new_location}')
         response = await client.post(new_location, json=data)
     logger.info(f"[CLIENT]: receive {response.status_code}")
-
-def save_messages(messages):
-    """
-    Saves parsed messages to a file.
-    
-    Args:
-        messages (list): List of messages to be saved.
-    
-    Notes:
-        This function writes the content of each message in the list to a file named 'messages.txt'.
-        Each message's content is written on a new line.
-    """
-    try:
-        with open('messages.txt', 'w', encoding='utf-8') as file:
-            for message in messages:
-                file.write(message["content"] + '\n')
-                time.sleep(1)
-        logger.info("[CLIENT]: all messages has been wrote in file")
-    except Exception as e:
-        logger.error(f"[CLIENT]: Error when writing messages in file {e}")
-             
+                 
 async def post_messages(client, parsed_messages, token: str):
     """
     Posts parsed messages to a server.
@@ -78,13 +58,15 @@ async def post_messages(client, parsed_messages, token: str):
             if parsed_message:
                 id = parsed_message["id"]
                 headers = {"Authorization": f"Bearer {token}"}
+                logger.info(f'[CLIENT]: post message {id}')
                 response = await client.post('http://localhost:8000/messages', json=parsed_message, headers=headers)
                 await handle_response(client, response)
-                logger.info(f'[CLIENT]: message {id} posted')
+    except httpx.RequestError as request_error:
+        logger.error(f"[CLIENT]: {request_error}")
     except Exception as e:
         logger.error(f"[CLIENT]: Error when posting messages {e}")     
           
-async def run(scraper: Scraper, parser: MessageParser, user_auth: UserAuth, user: User):
+async def run(scraper: Scraper, parser: MessageParser, user_auth: UserAuth, file_saver: FileSaver, user: User):
     """
     Runs the client process.
     
@@ -103,8 +85,10 @@ async def run(scraper: Scraper, parser: MessageParser, user_auth: UserAuth, user
             if token:
                 messages = await scraper.get_messages_from_group(PHONE_NUMBER, GROUP_USERNAME)
                 parsed_messages = parser.parse_messages(messages)
-                save_messages(parsed_messages)
+                file_saver.save_messages(parsed_messages)
                 await post_messages(client, parsed_messages, token)
+        except httpx.RequestError as request_error:
+            logger.error(f"[CLIENT]: {request_error}")
         except Exception as e:
             logger.error(f"[CLIENT]: {e}")      
          
@@ -115,4 +99,5 @@ if __name__ == '__main__':
         scraper = Scraper(API_ID, API_HASH)
         parser = MessageParser()
         user_auth = UserAuth()
-        asyncio.run(run(scraper, parser, user_auth, user))
+        file_saver = FileSaver()
+        asyncio.run(run(scraper, parser, user_auth, file_saver, user))
