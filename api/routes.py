@@ -8,20 +8,20 @@ from typing import List
 from dotenv import load_dotenv
 from psycopg2 import IntegrityError
 
-from ..services.message_service import MessageService
-from ..services.user_service import UserService
-from ..services.auth_service import AuthService
-from ..models.message_presenter import MessagePresenter
-from ..models.user_presenter import UserPresenter
-from ..models.encrypter import Encrypter
-from ..models.data_models import Message, LinkMessage, User, UserSignupResponse, UserLoginResponse
-from ..exceptions.message_exceptions import MessageAlreadyExist
-from ..exceptions.user_exceptions import UserNotFound, UserAlreadyExist, IncorrectPassword, InvalidPassword
-from ..exceptions.auth_exceptions import ExpiredToken, InvalidToken
-from ..database.database import Database
-from ..database.repositories.message_repository import MessageRepository
-from ..database.repositories.user_respository import UserRepository
-from ..utils.responses import create_message_responses, get_messages_responses, create_user_responses, login_user_responses
+from .services.message_service import MessageService
+from .services.user_service import UserService
+from .services.auth_service import AuthService
+from .models.message_presenter import MessagePresenter
+from .models.user_presenter import UserPresenter
+from .models.encrypter import Encrypter
+from .models.data_models import Message, LinkMessage, User, UserSignupResponse, UserLoginResponse
+from .exceptions.message_exceptions import MessageAlreadyExist
+from .exceptions.user_exceptions import UserNotFound, UserAlreadyExist, IncorrectPassword, InvalidPassword
+from .exceptions.auth_exceptions import ExpiredToken, InvalidToken
+from .database.database import Database
+from .database.repositories.message_repository import MessageRepository
+from .database.repositories.user_respository import UserRepository
+from .utils.responses import create_message_responses, get_messages_responses, create_user_responses, login_user_responses
 
 # Load environment variables from .env file
 load_dotenv()

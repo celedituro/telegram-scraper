@@ -2,9 +2,11 @@ import base64
 from datetime import datetime
 from unittest.mock import Mock
 from telethon.tl.types import MessageMediaPhoto, MessageMediaWebPage
+import sys
+sys.path.append("..")
 
-from ..models.parser import MessageParser
-from ..models.data_models import MessageType
+from scraper.models.parser import MessageParser
+from api.models.data_models import MessageType
 
 def test_01_get_photo_content():
     parser = MessageParser()

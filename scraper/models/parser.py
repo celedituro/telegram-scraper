@@ -1,7 +1,8 @@
-from telethon.tl.types import InputMessagesFilterEmpty, MessageMediaPhoto, MessageMediaWebPage
 import base64
 from datetime import datetime
-from .data_models import MessageType
+from telethon.tl.types import InputMessagesFilterEmpty, MessageMediaPhoto, MessageMediaWebPage
+
+from api.models.data_models import MessageType
 
 class MessageParser:
     """

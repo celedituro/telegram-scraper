@@ -3,12 +3,13 @@ import os
 import httpx
 import time
 from loguru import logger
-
 from dotenv import load_dotenv
+import sys
+sys.path.append("..")
 
 from models.parser import MessageParser
 from models.scraper import Scraper
-from models.data_models import User
+from api.models.data_models import User
 
 load_dotenv()
 

@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from ..models.message_presenter import MessagePresenter
-from ..models.user_presenter import UserPresenter
-from ..models.data_models import Message, MessageType
+from api.models.message_presenter import MessagePresenter
+from api.models.user_presenter import UserPresenter
+from api.models.data_models import Message, MessageType
 
 def test_01_present_message():
     message_presenter = MessagePresenter()

@@ -3,7 +3,7 @@ import os
 from loguru import logger
 
 script_directory = os.path.dirname(os.path.abspath(__file__))
-file_path = os.path.join(script_directory, "..", "app", "messages.txt")
+file_path = os.path.join(script_directory, "..", "scraper", "messages.txt")
 
 # Load rules from a file
 rules = yara.compile(filepath="mercadolibre.yara")

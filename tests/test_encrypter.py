@@ -1,7 +1,9 @@
 import pytest
+import sys
+sys.path.append("..")
 
-from ..models.encrypter import Encrypter
-from ..exceptions.user_exceptions import InvalidPassword
+from api.models.encrypter import Encrypter
+from api.exceptions.user_exceptions import InvalidPassword
     
 def test_01_encrypt_invalid_password():
     encrypter = Encrypter()
