@@ -21,7 +21,15 @@ REDIRECTION_STATUS_CODE = 307
 
 def get_user_credentials():
     """
-    Get username and password from user.
+    This function prompts the user for a username and password,
+    and returns a dictionary containing these values.
+
+    Returns:
+    dict: A dictionary with the user credentials in the following format:
+        {
+            "username": <username>,
+            "password": <password>
+        }
     """
     username = input('Username: ')
     password = input('Password: ')
@@ -33,11 +41,15 @@ def get_user_credentials():
 
 async def handle_response(client, response):
     """
-    Handles response from API server.
+    Handles the response from an API server after posting a message.
     
     Args:
-        client: async client that make requests.
-        response: response from API server when post a message.
+        client: An asynchronous client used to make requests.
+        response: The response received from the API server.
+        
+    Notes:
+        If the response status code indicates redirection, the function will follow
+        the redirection by sending a POST request to the new location.
     """
     if response.status_code == REDIRECTION_STATUS_CODE:
         new_location = response.headers.get('Location')
@@ -47,14 +59,19 @@ async def handle_response(client, response):
 
 def parse_messages(messages, parser: MessageParser):
     """
-    Parse telegram messages.
+    Parses Telegram messages using a specified parser.
     
     Args:
-        messages: messages of a group received from telegram.
-        parser: parser of telegram messages.
+        messages (list): List of messages from a Telegram group.
+        parser (MessageParser): An instance of the message parser for Telegram messages.
         
     Returns:
-        Telegram messages parsed.
+        list: Parsed Telegram messages.
+        
+    Notes:
+        This function iterates through the provided list of messages and uses the provided
+        parser to parse each message. If a parsed message is obtained from the parser,
+        it is added to the list of parsed messages.
     """
     parsed_messages = []
     for message in messages:
@@ -65,11 +82,14 @@ def parse_messages(messages, parser: MessageParser):
 
 def save_messages(messages):
     """
-    Write messages in a txt file.
+    Saves parsed messages to a file.
     
     Args:
-        messages: messages parsed.
-        
+        messages (list): List of messages to be saved.
+    
+    Notes:
+        This function writes the content of each message in the list to a file named 'messages.txt'.
+        Each message's content is written on a new line.
     """
     try:
         with open('messages.txt', 'w', encoding='utf-8') as file:
@@ -82,12 +102,16 @@ def save_messages(messages):
              
 async def post_messages(client, parsed_messages, token: str):
     """
-    Post parsed messages to API server.
+    Posts parsed messages to a server.
     
     Args:
-        client: async client that makes request.
-        messages: parsed messages from the telegram group.
-        token: access token of user from API.
+        client: An asynchronous client for making requests.
+        parsed_messages (list): List of parsed messages to be posted.
+        token (str): Authentication token for the server.
+    
+    Notes:
+        This function iterates through the parsed messages, sends each message to the server with the
+        authentication token, and handles the server's response using the handle_response function.
     """
     try:
         for parsed_message in parsed_messages:
@@ -102,15 +126,18 @@ async def post_messages(client, parsed_messages, token: str):
         
 async def authenticate_user(user: User, client):
     """
-    Authenticate user in API server.
+    Authenticates a user with the API server.
     
     Args:
-        user: user to authenticate.
-        client: async client that make requests.
-        
-        
+        user (dict): User information including username and password.
+        client: An asynchronous client for making requests.
+    
     Returns:
-        token: access token of user from API.
+        str: Authentication token if authentication is successful.
+    
+    Notes:
+        This function signs up and logs in a user, obtaining an authentication token from the server.
+        Logs information about the process.
     """
     try:
         username = user["username"]
@@ -127,12 +154,16 @@ async def authenticate_user(user: User, client):
           
 async def run(scraper: Scraper, parser: MessageParser, user: User):
     """
-    Post all the messages from a telegram group to the API server.
+    Runs the client process.
     
     Args:
-        scraper: entity that gets the messages from the telegram group.
-        parser: entity that parses telegram messages.
-        user: user to be authenticate in the API.
+        scraper: A scraper for obtaining messages.
+        parser: A parser for processing messages.
+        user (dict): User information including username and password.
+    
+    Notes:
+        This function orchestrates the entire client process, including user authentication,
+        message scraping, parsing, saving, and posting. Logs information about the process.
     """
     async with httpx.AsyncClient() as client:
         try:

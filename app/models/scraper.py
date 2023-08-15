@@ -5,19 +5,48 @@ from telethon import TelegramClient, sync
 from telethon.tl.types import InputMessagesFilterEmpty
 
 class Scraper:
+    """
+    A class for scraping Telegram group messages using the Telethon library.
+
+    Args:
+        api_id (str): The API ID for the Telethon client.
+        api_hash (str): The API hash for the Telethon client.
+
+    Attributes:
+        client: The Telethon client used for interacting with Telegram.
+
+    Methods:
+        get_client(api_id: str, api_hash: str): Creates and returns a Telethon client.
+        get_group_entity(group_username: str): Retrieves the entity of a Telegram group.
+        get_group_messages(entity): Retrieves messages from a Telegram group.
+        authorize_user(phone_number: str): Authorizes the user using a phone number.
+        get_messages_from_group(phone_number: str, group_username: str): Retrieves messages from a group.
+
+    Notes:
+        This class uses the Telethon library to interact with Telegram and retrieve group messages.
+        It handles user authorization and message retrieval from the specified group.
+    """
+    
     def __init__(self, api_id: str, api_hash: str):
+        """
+        Initializes the Telethon client.
+
+        Args:
+            api_id (str): The API ID for the Telethon client.
+            api_hash (str): The API hash for the Telethon client.
+        """
         self.client = self.get_client(api_id, api_hash)
 
     def get_client(self, api_id: str, api_hash: str):
         """
-        Get a telegram client to get messages from a group.
-        
+        Creates and returns a Telethon client.
+
         Args:
-            api_id: credential of a project in telegram.
-            api_hash: credential of a project in telegram.
-            
+            api_id (str): The API ID for the Telethon client.
+            api_hash (str): The API hash for the Telethon client.
+
         Returns:
-            Telegram client.
+            TelegramClient: An instance of the Telethon client.
         """
         try:
             logger.info('[SCRAPER]: getting telegram client')
@@ -27,13 +56,13 @@ class Scraper:
 
     async def get_group_entity(self, group_username: str):
         """
-        Get a telegram entity using its username.
-        
+        Retrieves the entity of a Telegram group.
+
         Args:
-            group_username: username from a telegram group.
-            
+            group_username (str): The username of the group.
+
         Returns:
-            Telegram entity.
+            Entity: The entity representing the Telegram group.
         """
         try:
             logger.info('[SCRAPER]: getting group entity')
@@ -43,13 +72,13 @@ class Scraper:
 
     async def get_group_messages(self, entity):
         """
-        Get all the messages from a telegram entity.
-        
+        Retrieves messages from a Telegram group.
+
         Args:
-            entity: telegram entity.
-            
+            entity: The entity representing the Telegram group.
+
         Returns:
-            List of telegram messages from the entity.
+            list: List of messages retrieved from the group.
         """
         try:
             logger.info('[SCRAPER]: getting group messages')
@@ -59,13 +88,10 @@ class Scraper:
     
     async def authorize_user(self, phone_number: str):
         """
-        Authenticate a user to create a telegram session.
-        
+        Authorizes the user using a phone number.
+
         Args:
-            phone_number: phone_number of the user to authenticate from telegram.
-            
-        Returns:
-            List of telegram messages from the entity.
+            phone_number (str): The user's phone number.
         """
         try:
             await self.client.start()
@@ -81,14 +107,18 @@ class Scraper:
                         
     async def get_messages_from_group(self, phone_number: str, group_username: str):
         """
-        Get all the messages from a given telegram group.
-        
+        Retrieves messages from a Telegram group.
+
         Args:
-            phone_number: number of the telegram account associated.
-            group_username: username of the group.
-            
+            phone_number (str): The user's phone number for authorization.
+            group_username (str): The username of the group.
+
         Returns:
-            List of messages from the telegram group.
+            list: List of messages retrieved from the group.
+
+        Notes:
+            This method coordinates the process of authorizing the user, getting the group entity,
+            retrieving messages from the group, and disconnecting the client.
         """
         try:
             await self.authorize_user(phone_number)

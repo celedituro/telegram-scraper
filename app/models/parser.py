@@ -5,94 +5,100 @@ from .data_models import MessageType
 
 class MessageParser:
     """
-    Creates an instance of the message parser.
-    
-    Returns:
-        A message parser.
+    A class responsible for parsing and formatting Telegram messages.
+
+    Attributes:
+        media_handlers (dict): A dictionary mapping message media types to corresponding handling methods.
+
+    Methods:
+        get_photo_content(media): Retrieves base64-encoded content of a photo message.
+        get_webpage_content(media): Retrieves the URL of a web page message.
+        get_message_date(date: datetime, format): Formats a message date.
+        get_message_content(message): Retrieves formatted message content.
+        get_message_type(message): Determines the type of a message.
+        parse_message(message): Parses and formats a Telegram message.
+
+    Notes:
+        This class assists in parsing and presenting different types of Telegram messages.
     """
+    
     def __init__(self):
+        """
+        Initializes the MessageParser with media handling methods.
+        """
         self.media_handlers = {
             MessageMediaPhoto: self.get_photo_content,
             MessageMediaWebPage: self.get_webpage_content
         }
     
-    """
-    Gets the content of a photo message.
-    
-    Args:
-        media: a telegram photo media.
-        
-    Returns:
-        A string encoded with base64.
-    """
     def get_photo_content(self, media):
+        """
+        Retrieves base64-encoded content of a photo message.
+
+        Args:
+            media (MessageMediaPhoto): The media object representing the photo.
+
+        Returns:
+            str: Base64-encoded content of the photo.
+        """
         return base64.b64encode(media.photo.sizes[0].bytes).decode('utf-8')
     
-    """
-    Gets the content of a webpage message.
-    
-    Args:
-        media: a telegram url media.
-        
-    Returns:
-        A string.
-    """
     def get_webpage_content(self, media):
+        """
+        Retrieves the URL of a web page message.
+
+        Args:
+            media (MessageMediaWebPage): The media object representing the web page.
+
+        Returns:
+            str: The URL of the web page.
+        """
         return media.webpage.url
     
-    """
-    Gets the message date in a given format.
-    
-    Args:
-        date: datetime.
-        format: datetime format.
-        
-    Returns:
-        A date.
-    """
     def get_message_date(self, date: datetime, format):
+        """
+        Formats a message date.
+
+        Args:
+            date (datetime): The message date.
+            format (str): The desired date format.
+
+        Returns:
+            str: The formatted date string.
+        """
         return date.strftime(format)
 
-    """
-    Gets the content of the message depending if its a text, photo or link message.
-    
-    Args:
-        message: Message object from Telegram.
-        
-    Returns:
-        A string.
-    """
     def get_message_content(self, message):
+        """
+        Retrieves formatted message content.
+
+        Args:
+            message: The Telegram message.
+
+        Returns:
+            str: The formatted message content.
+        """
         media_handler = self.media_handlers.get(type(message.media))
         if media_handler:
             return media_handler(message.media)
         return message.message
     
-    """
-    Gets the message type of the message.
-    
-    Args:
-        message: Message object from Telegram.
-        
-    Returns:
-        An instance of MessageType.
-    """
     def get_message_type(self, message):
+        """
+        Parses and formats a Telegram message.
+
+        Args:
+            message: The Telegram message.
+
+        Returns:
+            dict: The parsed and formatted message.
+        """
         media_type = type(message.media) if message.media else None
         return {
             MessageMediaPhoto: MessageType.photo,
             MessageMediaWebPage: MessageType.link
         }.get(media_type, MessageType.text)
-    
-    """
-    Parses a message received from Telegram into a Message type.
-    
-    Args:
-        message: Message object from Telegram.
-        
-    Returns:
-        A dictionary with id, channel_id, content, date and message_type.
-    """        
+           
     def parse_message(self, message):
         # ignore MessageService messages
         if message.message or message.media:
