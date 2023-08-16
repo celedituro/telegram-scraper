@@ -33,7 +33,7 @@ Una vez levantado el servidor de la API:
 **Paso 1)** Ubicarse en el directorio raíz del repositorio, abrir una nueva terminal, crear un entorno virtual mediante el siguiente comando `python -m venv myenv` y activarlo por medio del comando
 `.\myenv\Scripts\Activate`. (Tener en cuenta que estos comandos corresponden a una máquina con sistema operativo Windows).
 
-**Paso 2)** Ejecutar el comando `pip install -r requirements.txt` para instalar las dependencias necesarias para ejecutar el scraper.
+**Paso 2)** Ejecutar el comando `pip install -r requirements.txt` para instalar las dependencias necesarias para ejecutar el Scraper.
 
 **Paso 3)** Ubicarse en el directorio `/scraper` y ejecutar el comando `python client.py` para extraer los mensajes del grupo de Telegram. Se le va a solicitar al usuario ingresar ``username`` y ``password`` para registrarse en la API y poder crear mensajes.
 
@@ -68,8 +68,8 @@ Una vez creado y activado el entorno virutal así como extraídos los mensajes d
 
 **Paso 3)** Ejecutar el comando `deactivate` para desactivar el entorno virtual.
 
-*Nota*:
-Es importante haber ejecutado el Scraper previamente a ejecutar la regla de YARA ya que durante la ejecución del Scraper se guardan los mensajes extraídos del canal de Telegram en un archivo de texto con nombre `messages.txt` (en el directorio `/scraper`) y el mismo se utiliza para ejecutar la regla.
+*Notas*:
+Es importante haber ejecutado el Scraper previamente a ejecutar la regla de YARA ya que durante la ejecución del Scraper se guardan los mensajes extraídos del canal de Telegram en un archivo de texto con nombre `messages.txt` (en el directorio `/scraper`) y el mismo se utiliza para ejecutar la regla. También es importante instalar las dependencias que se encuentran el archivo `requirements.txt` en el entorno virtual para poder ejecutar la regla correctamente.
 
 ## Informe
 
