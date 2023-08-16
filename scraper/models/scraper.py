@@ -99,9 +99,9 @@ class Scraper:
         try:
             await self.client.start()
             if await self.client.is_user_authorized():
-                logger.info("[SCRAPER]: user auth already exist")
+                logger.info("[SCRAPER]: user already authorized")
             else:
-                logger.info("[SCRAPER]: start session with phone number")
+                logger.info("[SCRAPER]: authorizing user")
                 await self.client.send_code_request(phone_number)
                 code = input("Verification code: ")
                 await self.client.sign_in(phone_number, code)
@@ -129,7 +129,7 @@ class Scraper:
             if entity:
                 messages = await self.get_group_messages(entity)
                 if messages:
-                    self.client.disconnect()
+                    await self.client.disconnect()
                     return messages
         except Exception as e:
             logger.error(f"[SCRAPER]: {e}")

@@ -161,3 +161,5 @@ cython_debug/
 
 scraper/my_telegram_session.session
 scraper/messages.txt
+
+/myenv

@@ -18,8 +18,8 @@ class InputController:
             }
         """
         try:
-            username = input('Username: ')
-            password = input('Password: ')
+            username = input('API Username: ')
+            password = input('API Password: ')
 
             if not username or not password:
                 raise ValueError("Both username and password must have a value.")
