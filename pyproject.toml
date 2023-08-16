@@ -8,8 +8,6 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.11"
 uvicorn = "^0.15.0"
-pytest = "^6.2.5"
-fastapi = "^0.68.1"
 requests = "^2.31.0"
 psycopg2 = "^2.9.1"
 psycopg2-binary = "^2.9.3"
@@ -21,6 +19,8 @@ bcrypt = "^4.0.1"
 pyjwt = "^2.8.0"
 yara-python = "^4.3.1"
 loguru = "^0.7.0"
+fastapi = "^0.101.1"
+pytest = "^7.4.0"
 
 [build-system]
 requires = ["poetry-core"]
