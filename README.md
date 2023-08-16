@@ -24,7 +24,24 @@ Para extraer los mensajes del grupo de Telegram, se utiliza la librería `Teleth
 
 La primera vez que se ejecuta el archivo `client.py`, se le solicita al usuario ingresar el `código de verificación` que le llega a su cuenta de Telegram así como la `contraseña` de su cuenta de Telegram. Una vez ingresado el código de sesión, se extraen los mensajes del grupo definido en la variable `GROUP_USERNAME` en el archivo `.env`.
 
-Los valores `API_ID` y `API_HASH` de un nuevo proyecto se pueden obtener ingresando a la siguiente página: <https://my.telegram.org/auth>.
+### Pasos para obtener el `API_ID` y el `API_HASH`
+
+Para obtener el `API_ID` y el `API_HASH` necesarios para interactuar con la API de Telegram, debes seguir estos pasos:
+
+**Paso 1)** Crear una cuenta de Telegram: Si aún no tienes una cuenta de Telegram, descarga la aplicación en tu dispositivo y regístrate.
+
+**Paso 2)** Acceder al sitio web de Telegram API: Ingresa al sitio web oficial de Telegram API en <https://my.telegram.org/>.
+
+**Paso 3)** Iniciar sesión: Utiliza tu número de teléfono y la cuenta de Telegram que creaste para iniciar sesión en el sitio web.
+
+**Paso 4)** Crear una nueva aplicación: Después de iniciar sesión, verás una página llamada "API development tools". En esta página, busca la sección que dice "Create a new application" y rellena los campos obligatorios:
+
+- App title: El nombre de tu aplicación (puede ser cualquier nombre descriptivo).
+- Short name: Un nombre corto o abreviado para tu aplicación.
+- Platform: Elige la plataforma en la que planeas utilizar la API (por ejemplo, Android, iOS, etc.).
+- Description: Una descripción breve de tu aplicación.
+
+**Paso 5)** Obtener api_id y api_hash: Después de haber creado la aplicación, se te proporcionarán el api_id y el api_hash. Estos valores son únicos para cada aplicación y son necesarios para autenticarte con la API de Telegram.
 
 ### Ejecución del Scraper
 
